@@ -13,15 +13,15 @@ export AUTH0_CLIENT_ID=CMaBuwSnY0Vu68PLrWatvvu3iIiGPh7t
 export CALLBACK_URL=https://tc.cloud.topcoder.com/reg2/callback.action
 
 # web socket server url
-export WEB_SOCKET_URL=http://tc.cloud.topcoder.com:5037
+export WEB_SOCKET_URL=https://tc.cloud.topcoder.com:5037
 
 # the cookie key of sso token
 export SSO_KEY=tcsso_vm
 
 # the HTTP server port
-export PORT=3000
+export PORT=80
 
-export STATIC_FILE_HOST=http://arena.cloud.topcoder.com:$PORT
+export STATIC_FILE_HOST=https://151.236.22.198/arena-web
 
 export AWS_ACCESS_KEY_ID=
 export AWS_ACCESS_KEY=
