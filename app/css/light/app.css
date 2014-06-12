@@ -697,6 +697,9 @@ body a {cursor: pointer;}
     padding: 15px 15px 19px 0;
     height: 78px;/*update*/
     position: relative;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
 }
 .contest .titleBar {
     height: 77px;
@@ -759,27 +762,39 @@ body a {cursor: pointer;}
 .contest .breadcrumb li:after {
     right: -13px;
 }
+.lastLoginRow {
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    width:280px;
+}
 .dashboard .connection {
     font-size: 14px;
     float: right;
     text-align: right;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    width: 550px;
 }
 .codeArea .connection {
     padding-right: 92px;
+    width: 500px;
 }
 .contest .connection {
     padding-right: 83px;
+    width: 500px;
 }
 .dashboard .connection > div {
     display: inline-block;
-    padding-left: 34px;
+    padding-left: 25px;
 }
 .codeArea .connection>div {
     padding-left: 0;
 }
 .tcTime {
     display: block;
-    width: 114px;
+    width: 150px;
     font-size: 14px;
     text-align: left;
     color: #687376;
@@ -791,7 +806,7 @@ body a {cursor: pointer;}
 }
 .connectionStatus {
     display: block;
-    width: 107px;
+    width: 150px;
     font-size: 14px;
     color: #687376;
     line-height: 22px;
@@ -810,7 +825,7 @@ body a {cursor: pointer;}
 }
 .connectionStatus .green {
     background: #5fb806;
-    margin-left: 12px
+    margin-left: 8px
 }
 .connectionStatus .red {
     background: #f40000;
@@ -1150,7 +1165,7 @@ footer .right>span:nth-child(2) {
     display: inline-block;
     text-align: left;
 }
-.panel-custom .schedulePanel .title {width:180px;}
+.panel-custom .schedulePanel .title {width:170px;}
 .panel-custom .schedulePanel .startIn,.panel-custom .schedulePanel .endIn {width: 72px;}
 .panel-custom .schedulePanel .startIn>span,.panel-custom .schedulePanel .endIn>span{display: inline;}
 .panel-custom .schedulePanel .startTime {width: 200px;}
