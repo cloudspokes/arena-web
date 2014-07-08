@@ -173,7 +173,7 @@ main.config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'themerPr
     var styles = [{
             key : 'DARK',
             label : 'Dark Theme',
-            href : '@@STATIC_FILE_HOST/css/bundle.css'
+            href : defaultCSSurl
         }];
 
     themerProvider.setStyles(styles);
