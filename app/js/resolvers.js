@@ -37,8 +37,12 @@
  * - Added $broadcast to the $rootScope of CreateChallengeTableResponse and
  *   UpdateCoderComponentResponse events.
  *
- * @author amethystlei, dexy
- * @version 1.7
+ * Changes in version 1.8 (Module Assembly - Web Arena UI - Phase I Bug Fix 3):
+ * - Handled re-connect logic.
+ * - Sorted the chat user list.
+ *
+ * @author amethystlei, dexy, flytoj2ee
+ * @version 1.8
  */
 ///////////////
 // RESOLVERS //
@@ -105,9 +109,10 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
             });
             return forceLogout();
         }
-        if (!$rootScope.connected) {
-            return forceLogout();
-        }
+        // comment it now, it maybe change in final fix.
+//        if (!$rootScope.connected) {
+//            return forceLogout();
+//        }
     }, connectionTimeout);
     // handle the start sync response
     socket.on(helper.EVENT_NAME.StartSyncResponse, function (data) {
@@ -215,15 +220,28 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
      * even when the user is in coding/leaderboard pages.
      */
     socket.on(helper.EVENT_NAME.CreateUserListResponse, function (data) {
-        var i;
+        var i, tmpArray = [];
         $rootScope.whosHereArray = [];
         for (i = 0; i < data.names.length; i += 1) {
-            $rootScope.whosHereArray.push({
-                name: data.names[i],
+            tmpArray.push({name: data.names[i],
                 userListItem: data.userListItems[i],
-                rating: data.ratings[i]
-            });
+                rating: data.ratings[i]});
         }
+
+        tmpArray.sort(
+            function (a, b) {
+                var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+                if (nameA < nameB) {//sort string ascending
+                    return -1;
+                }
+                if (nameA > nameB) {
+                    return 1;
+                }
+                return 0;
+            }
+        );
+        $rootScope.whosHereArray = tmpArray;
+        $rootScope.whosHereArrayFullList = tmpArray;
         $rootScope.$broadcast('rebuild:whosHere');
         $rootScope.$broadcast('rebuild:members');
     });
@@ -263,26 +281,46 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
      */
     socket.on(helper.EVENT_NAME.UpdateUserListResponse, function (data) {
         var hasUserFlag = false,
-            i;
+            i,
+            tmpArray;
         if (data.roomID === $rootScope.currentRoomInfo.roomID && data.type === helper.USER_LIST.RoomUsers) {
             for (i = 0; i < $rootScope.whosHereArray.length; i += 1) {
                 if ($rootScope.whosHereArray[i].name === data.userListItem.userName) {
                     hasUserFlag = true;
                     if (data.action === helper.USER_LIST_UPDATE.Remove) {
                         $rootScope.whosHereArray.splice(i, 1);
-                        if ($rootScope.memberIdx === i) {
+                        if ($rootScope.memberIdx === data.userListItem.userName) {
                             $rootScope.memberIdx = null;
                         }
                     }
                 }
             }
             if (!hasUserFlag && data.action === helper.USER_LIST_UPDATE.Add) {
-                $rootScope.whosHereArray.push({
+
+                tmpArray = $rootScope.whosHereArray;
+
+                tmpArray.push({
                     name: data.userListItem.userName,
                     userListItem: data.userListItem,
                     rating: data.userListItem.userRating
                 });
+
+                tmpArray.sort(
+                    function (a, b) {
+                        var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+                        if (nameA < nameB) {//sort string ascending
+                            return -1;
+                        }
+                        if (nameA > nameB) {
+                            return 1;
+                        }
+                        return 0;
+                    }
+                );
+                $rootScope.whosHereArray = tmpArray;
             }
+
+            $rootScope.whosHereArrayFullList = $rootScope.whosHereArray;
             $rootScope.$broadcast('rebuild:whosHere');
             $rootScope.$broadcast('rebuild:members');
         }

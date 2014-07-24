@@ -18,8 +18,11 @@
  * - Updated to use the global popup modal in baseCtrl.js.
  * - Updated the countdown message formats in Active Contest Widget.
  *
- * @author amethystlei, dexy
- * @version 1.4
+ * Changes in version 1.5 (Module Assembly - Web Arena UI - Phase I Bug Fix 3):
+ * - Hide the register button if user already registered.
+ *
+ * @author amethystlei, dexy, TCASSEMBLER
+ * @version 1.5
  */
 'use strict';
 /*global module, angular*/
@@ -66,10 +69,48 @@ var activeContestsCtrl = ['$scope', '$rootScope', '$state', '$http', 'socket', '
         updateContest($rootScope.roundData[data.roundID]);
     });
     $scope.$on(helper.EVENT_NAME.PhaseDataResponse, function (event, data) {
-        updateContest($rootScope.roundData[data.phaseData.roundID]);
+        var contest = $rootScope.roundData[data.phaseData.roundID];
+        setTimeout(function () {
+            if ($scope.isRegistrationOpen(contest)) {
+                /*jslint unparam: true*/
+                $scope.$on(helper.EVENT_NAME.PopUpGenericResponse, function (event, data) {
+                    // remove the listener
+                    $scope.$$listeners[helper.EVENT_NAME.PopUpGenericResponse] = [];
+                    if (data.message.indexOf('You are already registered') === -1) {
+                        contest.isRegisterable = true;
+                    }
+                });
+                socket.emit(helper.EVENT_NAME.RegisterInfoRequest, {roundID: contest.roundID});
+            }
+        }, 5100);
+        updateContest(contest);
     });
+
+    // Test whether registration phase is open
+    $scope.isRegistrationOpen = function (contest) {
+        if (!contest) {
+            return false;
+        }
+        var phase = getPhase(contest, helper.PHASE_TYPE_ID.RegistrationPhase);
+        if (!phase) {
+            return false;
+        }
+        return phase.startTime <= $rootScope.now && $rootScope.now <= phase.endTime;
+    };
+
     /*jslint unparam:false*/
     angular.forEach($rootScope.roundData, function (contest) {
+        if ($scope.isRegistrationOpen(contest)) {
+            /*jslint unparam: true*/
+            $scope.$on(helper.EVENT_NAME.PopUpGenericResponse, function (event, data) {
+                // remove the listener
+                $scope.$$listeners[helper.EVENT_NAME.PopUpGenericResponse] = [];
+                if (data.message.indexOf('You are already registered') === -1) {
+                    contest.isRegisterable = true;
+                }
+            });
+            socket.emit(helper.EVENT_NAME.RegisterInfoRequest, {roundID: contest.roundID});
+        }
         updateContest(contest);
     });
 
@@ -96,21 +137,9 @@ var activeContestsCtrl = ['$scope', '$rootScope', '$state', '$http', 'socket', '
         return result;
     };
 
-    // Test whether registration phase is open
-    $scope.isRegistrationOpen = function (contest) {
-        if (!contest) {
-            return false;
-        }
-        var phase = getPhase(contest, helper.PHASE_TYPE_ID.RegistrationPhase);
-        if (!phase) {
-            return false;
-        }
-        return phase.startTime <= $rootScope.now && $rootScope.now <= phase.endTime;
-    };
-
     $scope.isShown = function (contest) {
         if (contest.action !== 'Enter') {
-            contest.action = $scope.isRegistrationOpen(contest) ? 'Register' : '';
+            contest.action = ($scope.isRegistrationOpen(contest) && contest.isRegisterable === true) ? 'Register' : '';
         }
         return contest.action !== '';
     };
@@ -161,13 +190,13 @@ var activeContestsCtrl = ['$scope', '$rootScope', '$state', '$http', 'socket', '
                         $scope.$$listeners[helper.EVENT_NAME.PopUpGenericResponse] = [];
                         angular.extend(data, {enableClose: true});
                         $scope.openModal(data);
-                        contest.isRegistered = true;
+                        contest.isRegisterable = false;
                         $scope.setDetailIndex(contest, 2);
                     });
                     /*jslint unparam: false*/
                     socket.emit(helper.EVENT_NAME.RegisterRequest, {roundID: roundID});
                 }, function () {
-                    contest.isRegistered = false;
+                    contest.isRegisterable = true;
                 });
                 $scope.okDisabled = false;
             });

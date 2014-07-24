@@ -28,8 +28,12 @@
  * Changes in version 1.6 (Module Assembly - Web Arena UI - Rating Indicator):
  * - Updated to include the directive for rating indicator.
  *
- * @author tangzx, dexy, amethystlei
- * @version 1.6
+ * Changes in version 1.7 (Module Assembly - Web Arena UI - Phase I Bug Fix 3):
+ * - Updated to include the code mirror add-on.
+ * - Updated to set reconnect logic.
+ *
+ * @author tangzx, dexy, amethystlei, TCASSEMBLER
+ * @version 1.7
  */
 'use strict';
 /*jshint -W097*/
@@ -53,6 +57,9 @@ require('./../../bower_components/codemirror/addon/fold/foldgutter');
 require('./../../bower_components/codemirror/addon/fold/brace-fold');
 require('./../../bower_components/codemirror/addon/fold/comment-fold');
 require('./../../bower_components/codemirror/addon/fold/indent-fold');
+require('./../../bower_components/codemirror/addon/search/match-highlighter');
+require('./../../bower_components/codemirror/addon/search/searchcursor');
+require('./../../bower_components/codemirror/addon/search/search');
 require('./../../bower_components/angular-timer/dist/angular-timer');
 require('./../../bower_components/jquery-ui/ui/jquery-ui.js');
 require('./../../bower_components/angular-ui-calendar/src/calendar.js');
@@ -396,6 +403,7 @@ main.run(['$rootScope', '$state', 'sessionHelper', 'socket', '$window', 'tcTimeS
         $rootScope.userPreferences = sessionHelper.getUserPreferences;
         $rootScope.timeService = tcTimeService;
         $rootScope.keepAliveTimeout = helper.KEEP_ALIVE_TIMEOUT;
+        $rootScope.reconnected = false;
 
         socket.on(helper.EVENT_NAME.SocketConnected, function () {
             $rootScope.connected = true;
@@ -411,6 +419,12 @@ main.run(['$rootScope', '$state', 'sessionHelper', 'socket', '$window', 'tcTimeS
         });
         socket.on(helper.EVENT_NAME.SocketError, function () {
             $rootScope.$broadcast(helper.EVENT_NAME.SocketError, {});
+        });
+
+        socket.on(helper.EVENT_NAME.SocketReconnect, function () {
+            // get reconnect, but it should login again, keep connected flag to false here.
+            // $rootScope.connected = true;
+            $rootScope.reconnected = true;
         });
     });
 

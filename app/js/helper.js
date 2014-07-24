@@ -41,8 +41,12 @@
  * - Added CloseDivSummaryRequest and DivSummaryRequest.
  * - Added LANGUAGE_NAME, VIEW_ID, DIVSUMMARYREQUEST_TIMEGAP constants.
  *
- * @author tangzx, amethystlei, dexy
- * @version 1.9
+ * Changes in version 1.10 (Module Assembly - Web Arena UI - Phase I Bug Fix 3):
+ * - Added coder history event names.
+ * - Updated for re-connect logic.
+ *
+ * @author tangzx, amethystlei, dexy, flytoj2ee
+ * @version 1.10
  */
 
 module.exports = {
@@ -119,6 +123,8 @@ module.exports = {
         UpdateUserListResponse: 'UpdateUserListResponse',
         UpdateRoundListResponse: 'UpdateRoundListResponse',
         UserInfoResponse: 'UserInfoResponse',
+        CoderHistoryRequest: 'CoderHistoryRequest',
+        CoderHistoryResponse: 'CoderHistoryResponse',
         // internal events
         Connected: 'Connected',
         Disconnected: 'Disconnected',
@@ -126,6 +132,7 @@ module.exports = {
         SocketConnected: 'connect',
         SocketConnectionFailed: 'connect_failed',
         SocketDisconnected: 'disconnect',
+        SocketReconnect: 'reconnect',
         SocketError: 'error'
     },
 
@@ -234,7 +241,7 @@ module.exports = {
     // custom pop up messages
     POP_UP_MESSAGES: {
         Reconnecting: "Waiting to reconnect...\nPress Close to log out and go to the log in screen.",
-        ForcedLogout: 'The connection to the server has been lost. Logging off.'
+        ForcedLogout: 'The connection to the server has been lost. Please log off and log in again.'
     },
 
     // The mapper from time zone code (must be uppercase) to offset from UTC (in minutes).
