@@ -167,6 +167,10 @@ body a {cursor: pointer;}
 .navIcons .iconTS:before{
     background-position: -175px 0;
 }
+.navIcons .iconBR:before{
+    background-position: -18px -21px;
+    background-image: url(../img/bug-icon.png) !important;
+}
 .navIcons .active .icon:after {
     content: '';
     display: block;
