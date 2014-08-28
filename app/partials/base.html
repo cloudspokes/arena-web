@@ -24,6 +24,7 @@
                         <li data-ng-class="{ active: $state.includes('user.dashboard') }">
                           <a data-ui-sref="user.dashboard" class="icon iconLobby">LOBBY</a><a data-ui-sref="user.dashboard" class="visible-lg visible-md tip" data-tooltip-popup-delay='100' data-tooltip-placement="bottom" data-tooltip="Lobby" data-ng-click="returnLobby()"></a>
                         </li>
+			<!--
                         <li data-ng-class="{ active: $state.includes('user.contests') || $state.includes('user.contest') || $state.includes('user.coding') || $state.includes('user.contestSummary')}">
                           <a class="icon iconContests">CONTESTS</a><a class="visible-lg visible-md tip" data-tooltip-popup-delay='100' data-tooltip-placement="bottom" data-tooltip="Contests"></a>
                         </li>
@@ -42,6 +43,7 @@
                         <li data-ng-class="">
                           <a class="icon iconPT">PROBLEM TRACKER</a><a class="visible-lg visible-md tip" data-tooltip-popup-delay='100' data-tooltip-placement="bottom" data-tooltip="Problem tracker"></a>
                         </li>
+			-->
                         <li class="themeSwitcher" data-ng-class="">
                           <a id="iconTS" class="icon iconTS" data-ng-click="openThemeSelector($event)">THEME SWITCHER</a><a class="visible-lg visible-md tip" data-tooltip-popup-delay='100' data-tooltip-placement="bottom" data-tooltip="{{themePanelOpen ? null : 'Theme switcher'}}" data-ng-click="openThemeSelector($event)" ></a>
                           <div class="themePanel" data-ng-show="themePanelOpen" id="themePanel">
@@ -57,6 +59,9 @@
                         </li>
                         <li data-ng-click="createContest();">
                           <a class="icon iconCC">CONTEST CREATION</a><a class="visible-lg visible-md tip" data-tooltip-popup-delay='100' data-tooltip-placement="bottom" data-tooltip="Contest creation wizard"></a>
+                        </li>
+                        <li data-ng-class="">
+                          <a class="icon iconBug">REPORT ISSUE</a><a href="https://github.com/cloudspokes/arena-web/issues" target="_blank" class="visible-lg visible-md tip" data-tooltip-popup-delay='100' data-tooltip-placement="bottom" data-tooltip="Report Issue"></a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right userInfo">
@@ -74,12 +79,10 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="left hidden-xs hidden-sm col-md-4 col-lg-4">
-                    <span>OWR SPONSOR</span>
+                    <span>OUR SPONSOR</span>
                 </div>
                 <div class="right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <span class="sponsorLogo">Logo</span>
-                    <span>VENI VIDI VICI!</span>
-                    WE ARE HIRING!
                 </div>
             </div>
         </div>
@@ -97,5 +100,18 @@
         <button class="btn right-btn" data-ng-click="ok()" data-ng-show="buttons.length == 2">{{ buttons[0] }}</button>
         <button class="btn left-btn" data-ng-click="cancel()" data-ng-show="buttons.length == 2">{{ buttons[1] }}</button>
         <button class="btn right-btn" data-ng-click="cancel()" data-ng-show="buttons.length == 1">{{ buttons[0] }}</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="popupModalDetailBase.html">
+    <div class="modal-header coder-history-modal-header">
+        {{ title }}
+        <span class="cancel-x" data-ng-click="ok()" ng-if="enableClose">X</span>
+    </div>
+    <div class="modal-body textAlign textColor">
+        <p ng-bind-html="message" class="coder-history-textMargin"></p>
+    </div>
+    <div class="modal-footer textAlign">
+        <button class="btn" data-ng-click="ok()">Close</button>
     </div>
 </script>
