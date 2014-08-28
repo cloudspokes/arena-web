@@ -53,7 +53,7 @@ require('./../../bower_components/angular-sanitize/angular-sanitize');
 require('./../../bower_components/angular-themer');
 require('./../../bower_components/angular-ui-angular/angular-cookies.min.js');
 require('./../../bower_components/angular-ui-router/release/angular-ui-router');
-require('./../../bower_components/angular-ui-bootstrap/ui-bootstrap-tpls-0.9.0');
+require('./../../bower_components/angular-bootstrap/ui-bootstrap-tpls');
 require('./../../bower_components/codemirror/lib/codemirror');
 require('./../../bower_components/angular-ui-codemirror/ui-codemirror');
 require('./../../bower_components/codemirror/mode/clike/clike');

@@ -55,6 +55,9 @@
                             <a class="btn" data-ng-click="applyTheme()">APPLY</a>
                           </div>
                         </li>
+                        <li data-ng-click="createContest();">
+                          <a class="icon iconCC">CONTEST CREATION</a><a class="visible-lg visible-md tip" data-tooltip-popup-delay='100' data-tooltip-placement="bottom" data-tooltip="Contest creation wizard"></a>
+                        </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right userInfo">
                         <li>Welcome&nbsp;<span class="{{getRatingClass(userInfo().rating)}}">{{ username() }}</span></li>

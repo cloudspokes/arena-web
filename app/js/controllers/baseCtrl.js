@@ -58,7 +58,8 @@
  *
  * @type {exports}
  */
-var helper = require('../helper');
+var helper = require('../helper'),
+    contestCreationCtrl = require('./contestCreationCtrl');
 
 /**
  * The base controller.
@@ -446,6 +447,34 @@ var baseCtrl = ['$rootScope', '$scope', '$http', 'appHelper', 'notificationServi
             buttons: buttons,
             enableClose: true
         }, okClicked);
+    };
+
+    // open contest creation wizard
+    $scope.createContest = function () {
+        // data, handle, finish, templateUrl
+        // if ($rootScope.currentModal) {
+        //     $rootScope.currentModal.dismiss('cancel');
+        //     $rootScope.currentModal = undefined;
+        // }
+        // 
+        $rootScope.currentModal = $modal.open({
+            templateUrl: '../../../partials/contestCreationWizard.html',
+            controller: contestCreationCtrl,
+            backdrop: 'static',
+            size: 'lg',
+            resolve: {
+                ok: function () {
+                    return function () {
+                        $rootScope.currentModal = undefined;
+                    };
+                },
+                cancel: function () {
+                    return function () {
+                        $rootScope.currentModal = undefined;
+                    };
+                }
+            }
+        });
     };
 }];
 
