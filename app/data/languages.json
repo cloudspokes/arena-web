@@ -1,0 +1,18 @@
+{
+    "all": [
+        "Java",
+        "C++",
+        "C#",
+        "Python",
+        "VB",
+        "Ruby",
+        "Go"
+    ],
+    "commonSet": [
+        "Java",
+        "C++",
+        "C#",
+        "Python",
+        "VB"
+    ]
+}
