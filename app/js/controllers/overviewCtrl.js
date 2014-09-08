@@ -16,13 +16,22 @@
  */
 'use strict';
 
-var overviewCtrl = ['$scope', '$rootScope', function ($scope, $rootScope) {
+var overviewCtrl = ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
     $scope.showSection = "overview";
     $scope.userProfile = $rootScope.userInfo();
 
     $scope.isInt = function (value) {
         return !isNaN(value) && (parseInt(value, 10) === value);
     };
+
+    $scope.$watch('showSection', function () {
+   // $timeout(function(){
+        if ($scope.showSection === "users") {
+            $scope.$broadcast('rebuild:activeUser');//},100);
+        } else if ($scope.showSection === 'leaderboard') {
+            $scope.$broadcast('rebuild:leader');
+        }
+    });
 }];
 
 module.exports = overviewCtrl;

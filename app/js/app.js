@@ -73,6 +73,7 @@ require('./../../bower_components/angular-ui-calendar/src/calendar.js');
 require('./../../bower_components/fullcalendar/fullcalendar.js');
 require('./../../bower_components/angulartics/dist/angulartics.min');
 require('./../../bower_components/angulartics/dist/angulartics-ga.min');
+require('./../../bower_components/angular-table/ng-table.min.js');
 require('./../../thirdparty/jquery.qtip/jquery.qtip.min.js');
 require('./../../thirdparty/ng-scrollbar/dist/ng-scrollbar.js');
 
@@ -116,6 +117,8 @@ controllers.contestPlanCtrl = require('./controllers/contestPlanCtrl');
 controllers.messageArenaCtrl = require('./controllers/messageArenaCtrl');
 controllers.contestSummaryCtrl = require('./controllers/contestSummaryCtrl');
 controllers.userContestDetailCtrl = require('./controllers/userContestDetailCtrl');
+controllers.activeUsersCtrl = require('./controllers/activeUsersCtrl');
+controllers.overviewLeaderboardCtrl = require('./controllers/overviewLeaderboardCtrl');
 
 // load directives
 directives.leaderboardusers = require('./directives/leaderboardusers');
@@ -135,6 +138,8 @@ directives.contestSummary = require('./directives/contestSummary');
 directives.ratingIndicator = require('./directives/ratingIndicator');
 directives.autoFillFix = require('./directives/autoFillFix');
 directives.sglclick = require('./directives/sglclick');
+directives.activeUser = require('./directives/activeUser');
+directives.overviewLeaderboard = require('./directives/overviewLeaderboard');
 
 /*global $ : false, angular : false */
 /*jslint nomen: true, browser: true */
@@ -146,7 +151,7 @@ directives.sglclick = require('./directives/sglclick');
 // WARNING: ALL dependency injections must be explicitly declared for release js minification to work!!!!!
 // SEE: http://thegreenpizza.github.io/2013/05/25/building-minification-safe-angular.js-applications/ for explanation.
 
-var main = angular.module('angularApp', ['ui.router', 'ngResource', 'ui.bootstrap', 'ngSanitize', 'timer', 'ui.codemirror', 'ui.calendar', 'ngScrollbar', 'angular-themer', 'ngCookies', 'angulartics', 'angulartics.google.analytics']);
+var main = angular.module('angularApp', ['ui.router', 'ngResource', 'ui.bootstrap', 'ngSanitize', 'timer', 'ui.codemirror', 'ui.calendar', 'ngScrollbar', 'angular-themer', 'ngCookies', 'angulartics', 'angulartics.google.analytics', 'ngTable']);
 
 ///////////////
 // FACTORIES //
@@ -188,6 +193,8 @@ main.controller('baseCtrl', controllers.baseCtrl);
 main.controller('messageArenaCtrl', controllers.messageArenaCtrl);
 main.controller('contestSummaryCtrl', controllers.contestSummaryCtrl);
 main.controller('userContestDetailCtrl', controllers.userContestDetailCtrl);
+main.controller('activeUsersCtrl', controllers.activeUsersCtrl);
+main.controller('overviewLeaderboardCtrl', controllers.overviewLeaderboardCtrl);
 
 /////////////////
 // DIRECTIVES //
@@ -209,12 +216,17 @@ main.directive('contestSummary', directives.contestSummary);
 main.directive('ratingIndicator', directives.ratingIndicator);
 main.directive('autoFillFix', directives.autoFillFix);
 main.directive('sglclick', directives.sglclick);
+main.directive('activeuser', directives.activeUser);
+main.directive('overviewleaderboard', directives.overviewLeaderboard);
 
 //////////////////////////////////////
 // ROUTING AND ROUTING INTERCEPTORS //
 
 main.config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'themerProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, themerProvider) {
 // theme selector starts
+    if (config.staticFileHost === 'undefined') {
+        config.staticFileHost = "";
+    }
     var styles = [{
             key : 'DARK',
             label : 'Dark Theme',
@@ -223,6 +235,13 @@ main.config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'themerPr
 
     themerProvider.setStyles(styles);
     themerProvider.setSelected(styles[0].key);
+    //initialize get if not there
+    if (!$httpProvider.defaults.headers.get) {
+        $httpProvider.defaults.headers.get = {};
+    }
+    //disable ajax request caching
+    $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+
     //add an interceptor to always add authentication to api calls if logged in
     $httpProvider.interceptors.push(['sessionHelper', function (sessionHelper) {
         return {
