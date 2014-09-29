@@ -131,6 +131,7 @@ controllers.notificationsCtrl = require('./controllers/notificationsCtrl');
 controllers.contestSummaryCtrl = require('./controllers/contestSummaryCtrl');
 controllers.userContestDetailCtrl = require('./controllers/userContestDetailCtrl');
 controllers.testPanelCtrl = require('./controllers/testPanelCtrl');
+controllers.contestManagementCtrl = require('./controllers/contestManagementCtrl');
 controllers.activeUsersCtrl = require('./controllers/activeUsersCtrl');
 controllers.overviewLeaderboardCtrl = require('./controllers/overviewLeaderboardCtrl');
 
@@ -188,6 +189,7 @@ main.factory('notificationService', factories.notificationService);
 // FILTERS //
 main.filter('showByMonth', filters.showByMonth);
 main.filter('startFrom', filters.startFrom);
+main.filter('highlight', filters.highlight);
 
 /////////////////
 // CONTROLLERS //
@@ -213,6 +215,7 @@ main.controller('notificationsCtrl', controllers.notificationsCtrl);
 main.controller('contestSummaryCtrl', controllers.contestSummaryCtrl);
 main.controller('userContestDetailCtrl', controllers.userContestDetailCtrl);
 main.controller('testPanelCtrl', controllers.testPanelCtrl);
+main.controller('contestManagementCtrl', controllers.contestManagementCtrl);
 main.controller('activeUsersCtrl', controllers.activeUsersCtrl);
 main.controller('overviewLeaderboardCtrl', controllers.overviewLeaderboardCtrl);
 
@@ -327,6 +330,15 @@ main.config([ '$stateProvider', '$urlRouterProvider', 'themerProvider', '$httpPr
             },
             templateUrl: 'partials/user.contest.detail.html',
             controller: 'userContestDetailCtrl'
+        })
+        .state('user.contestManagement', {
+            url: '/contestManagement',
+            data: {
+                pageTitle: "Manage Contests",
+                pageMetaKeywords: "contestManagement"
+            },
+            templateUrl: 'partials/user.contestManagement.html',
+            controller: 'contestManagementCtrl'
         })
         .state('user.profile', {
             url: '/profile',
