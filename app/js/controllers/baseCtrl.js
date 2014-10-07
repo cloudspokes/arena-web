@@ -595,6 +595,40 @@ var baseCtrl = ['$rootScope', '$scope', '$http', 'appHelper', 'notificationServi
             }
         });
     };
+
+    /**
+     * Open contest creation wizard
+     */
+    $scope.openProblem = function () {
+        $scope.componentID = 2021;
+
+        $scope.$state.go(helper.STATE_NAME.Coding, {
+            roundId: 13686,
+            problemId: 10195,
+            divisionId: 1
+        });
+
+        socket.on('RoomInfoResponse', function(data) {
+            console.log('info', 'Loading problem....');
+            
+            socket.emit('OpenComponentForCodingRequest', { 
+                componentID: 2021,
+                handle: $scope.username()
+            }); 
+        });
+
+        socket.on('OpenComponentResponse', function(data) {
+            console.log(data);
+        });
+
+        socket.on('GetProblemResponse', function (data) {
+            console.log(data);
+
+        });
+
+        socket.emit('MoveRequest', { moveType: 4, roomID: 299179 });
+        socket.emit('EnterRequest', { roomID: -1 });
+    };
 }];
 
 module.exports = baseCtrl;
