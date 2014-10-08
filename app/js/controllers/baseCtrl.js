@@ -603,9 +603,9 @@ var baseCtrl = ['$rootScope', '$scope', '$http', 'appHelper', 'notificationServi
         $scope.componentID = 2021;
 
         $scope.$state.go(helper.STATE_NAME.Coding, {
-            roundId: 13686,
+            roundId: 13674,
             problemId: 10195,
-            divisionId: 1
+            divisionId: 2
         });
 
         socket.on('RoomInfoResponse', function(data) {
@@ -626,7 +626,7 @@ var baseCtrl = ['$rootScope', '$scope', '$http', 'appHelper', 'notificationServi
 
         });
 
-        socket.emit('MoveRequest', { moveType: 4, roomID: 299179 });
+        socket.emit('MoveRequest', { moveType: 4, roomID: 299156 });
         socket.emit('EnterRequest', { roomID: -1 });
     };
 }];
