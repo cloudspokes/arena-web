@@ -191,12 +191,20 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
 
     // handle the create round list response
     socket.on(helper.EVENT_NAME.CreateRoundListResponse, function (data) {
-        if (data.type === 2 || data.type === 1) { // only cares about active contests
+        if (data.type === 2) { // only cares about active contests
             if (!$rootScope.roundData) {
                 $rootScope.roundData = {};
             }
             angular.forEach(data.roundData, function (contest) {
                 $rootScope.roundData[contest.roundID] = contest;
+            });
+        }
+        if (data.type === 1) { // practice rooms
+            if (!$rootScope.practiceRoundData) {
+                $rootScope.practiceRoundData = {};
+            }
+            angular.forEach(data.roundData, function (contest) {
+                $rootScope.practiceRoundData[contest.roundID] = contest;
             });
         }
     });

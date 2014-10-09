@@ -366,7 +366,7 @@ var userCodingCtrl = ['$scope', '$stateParams', '$rootScope', 'socket', '$window
 
             // get languages from round data
             // it may be undefined, but assign it anyway
-            $scope.problem.supportedLanguages = $scope.roundData[$scope.roundID].customProperties.allowedLanguages;
+            $scope.problem.supportedLanguages = ($rootScope.roundData[$scope.roundID] ? $rootScope.roundData[$scope.roundID] : $rootScope.practiceRoundData[$scope.roundID]).customProperties.allowedLanguages;
 
             // set user data
             $scope.tests = component.testCases;
@@ -477,7 +477,7 @@ var userCodingCtrl = ['$scope', '$stateParams', '$rootScope', 'socket', '$window
         // load problem depended on states
         if ($scope.currentStateName() === helper.STATE_NAME.Coding) {
             if ($scope.problemID) {
-                round = $rootScope.roundData[$scope.roundID];
+                round = $rootScope.roundData[$scope.roundID] ? $rootScope.roundData[$scope.roundID] : $rootScope.practiceRoundData[$scope.roundID];
                 if (round) {
                     if (round.problems) {
                         if (angular.isDefined(round.problems[$scope.divisionID])) {
