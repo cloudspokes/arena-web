@@ -4592,6 +4592,10 @@ footer .right>span:nth-child(2) {
     -moz-box-shadow: none;
     box-shadow: none;
 }
+.body .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-pos {
+    margin-top: 10px;
+    padding-bottom: 20px;
+}
 .body .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-pos .ngsb-thumb {
     width: 7px;
     background: #2a2b2c;
