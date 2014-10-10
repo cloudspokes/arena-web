@@ -40,4 +40,19 @@ filters.startFrom = [function () {
     };
 }];
 
+// highlight the results
+filters.highlight = [function () {
+    return function (text, search, caseSensitive) {
+        if (text && (search || angular.isNumber(search))) {
+            text = text.toString();
+            search = search.toString();
+            if (caseSensitive) {
+                return text.split(search).join('<span class="hl-matched">' + search + '</span>');
+            }
+            return text.replace(new RegExp(search, 'gi'), '<span class="hl-matched">$&</span>');
+        }
+        return text;
+    };
+}];
+
 module.exports = filters;
