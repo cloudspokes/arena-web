@@ -1,0 +1,36 @@
+{
+    "contest" : {
+        "type": [
+            "Single Round Match",
+            "Tournament Round",
+            "Practice Round",
+            "Long Round",
+            "Marathon Match"
+        ],
+        "status": [
+            "Active",
+            "Inactive",
+            "Complete",
+            "Ready"
+        ]
+    },
+    "problem": {
+        "type": [
+            "Single",
+            "Long",
+            "Team"
+        ],
+        "status": [
+            "Proposal Pending Approval",
+            "Proposal Rejected",
+            "Proposal Approved",
+            "Submission Pending",
+            "Submission Rejected",
+            "Submission Approved",
+            "Testing",
+            "Ready",
+            "Used",
+            "Final Testing"
+        ]
+    }
+}
