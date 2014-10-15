@@ -76,7 +76,12 @@
  * - Updated to include resources for Practice Problem List page.
  *
  * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee
- * @version 1.20
+
+ * Changes in version 1.21 (Module Assembly - Web Arena - Code With Practice Problem)
+ * - Added user.practiceCode state.
+ *
+ * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee, TCSASSEMBLER
+ * @version 1.21
  */
 'use strict';
 /*jshint -W097*/
@@ -346,6 +351,15 @@ main.config([ '$stateProvider', '$urlRouterProvider', 'themerProvider', '$httpPr
             data: {
                 pageTitle: "View Code",
                 pageMetaKeywords: "code,arena"
+            },
+            templateUrl: 'partials/user.coding.html',
+            controller: 'userCodingCtrl'
+        })
+        .state('user.practiceCode', {
+            url: '/practiceCode/{roundId}/{componentId}/{divisionId}/{roomId}',
+            data: {
+                pageTitle: "Practice",
+                pageMetaKeywords: "practice,code,arena"
             },
             templateUrl: 'partials/user.coding.html',
             controller: 'userCodingCtrl'

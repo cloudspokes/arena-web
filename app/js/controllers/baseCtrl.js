@@ -69,7 +69,11 @@
  * - Added handling leaderboard events from userContestDetailCtrl.js.
  *
  * @author dexy, amethystlei, ananthhh, flytoj2ee
- * @version 1.15
+ * Changes in version 1.16 (Module Assembly - Web Arena - Code With Practice Problem)
+ * - Changed the open practice problem logic.
+ *
+ * @author dexy, amethystlei, ananthhh, flytoj2ee, TCASSEMBLER
+ * @version 1.16
  */
 'use strict';
 /*jshint -W097*/
@@ -910,6 +914,18 @@ var baseCtrl = ['$rootScope', '$scope', '$http', 'appHelper', 'notificationServi
             message: ''
         }, null, null, 'partials/user.code.history.html');
     });
+    /**
+     * Open practice problem.
+     */
+    $scope.openProblem = function () {
+        $scope.$state.go(helper.STATE_NAME.PracticeCode, {
+            roundId: 13674,
+            problemId: 10195,
+            divisionId: 2,
+            componentId: 2021,
+            roomId: 299156
+        }, {reload: true});
+    };
 }];
 
 module.exports = baseCtrl;

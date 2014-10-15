@@ -73,10 +73,17 @@
  * Changes in version 1.18 (PoC Assembly - Share Member Status To Facebook and Twitter):
  * - Added FACEBOOK_TITLES, FACEBOOK_MESSAGES, SOCIAL constants to handle posting to Facebook and Twitter.
  *
+<<<<<<< HEAD
  * Changes in version 1.19 (Module Assembly - Web Arena UI - Contest Management and Problem Assignment v1.0)
  * - Added ROUND_STATUS, MANAGE_CONTESTS_PAGE_LENGTH
  *
  * @author tangzx, amethystlei, dexy, ananthhh, flytoj2ee
+=======
+ * Changes in version 1.19 (Module Assembly - Web Arena - Code With Practice Problem)
+ *  - Added PracticeCode state and PracticeRoom room type.
+ *
+ * @author tangzx, amethystlei, dexy, ananthhh, flytoj2ee, TCASSEMBLER
+>>>>>>> practice
  * @version 1.19
  */
 
@@ -87,6 +94,7 @@ module.exports = {
         Dashboard: 'user.dashboard',
         Coding: 'user.coding',
         ViewCode: 'user.viewCode',
+        PracticeCode: 'user.practiceCode',
         Contest: 'user.contest',
         ContestSummary: 'user.contestSummary',
         Logout: 'user.logout',
@@ -306,6 +314,7 @@ module.exports = {
     ROOM_TYPE_ID: {
         CoderRoom: 2,
         LobbyRoom: 3,
+        PracticeRoom: 4,
         AdminRoom: 12
     },
 
