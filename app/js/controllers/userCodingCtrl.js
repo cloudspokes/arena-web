@@ -31,8 +31,11 @@
  * Changes in version 1.7 (Module Assembly - Web Arena Bug Fix 20140909):
  * - Updated the test panel height in expand mode.
  *
+ * Changes in version 1.8 (Module Assembly - Web Arena - Code With Practice Problem)
+ *  - Added logic for practice code state to support practice problem.
+ *
  * @author dexy, amethystlei, TCASSEMBLER
- * @version 1.7
+ * @version 1.8
  */
 'use strict';
 /*global module, angular, document, $*/
@@ -57,7 +60,6 @@ var userCodingCtrl = ['$scope', '$stateParams', '$rootScope', 'socket', '$window
         $scope.topStatus = 'normal';
         $scope.bottomStatus = 'normal';
         $scope.noCountdown = true;
-
         // problem data
         $scope.problem = {};
 
@@ -66,6 +68,8 @@ var userCodingCtrl = ['$scope', '$stateParams', '$rootScope', 'socket', '$window
         $scope.divisionID = Number($stateParams.divisionId);
         $scope.problemLoaded = false;
         $scope.hasExampleTest = false;
+
+        $rootScope.previousStateName = $scope.currentStateName();
 
         var componentOpened = false, problemRetrieved = false, notified = false, round;
 
@@ -366,7 +370,11 @@ var userCodingCtrl = ['$scope', '$stateParams', '$rootScope', 'socket', '$window
 
             // get languages from round data
             // it may be undefined, but assign it anyway
-            $scope.problem.supportedLanguages = ($rootScope.roundData[$scope.roundID] ? $rootScope.roundData[$scope.roundID] : $rootScope.practiceRoundData[$scope.roundID]).customProperties.allowedLanguages;
+            if ($rootScope.roundData[$scope.roundID]) {
+                $scope.problem.supportedLanguages = $rootScope.roundData[$scope.roundID].customProperties.allowedLanguages;
+            } else {
+                $scope.problem.supportedLanguages = $rootScope.practiceRoundData[$scope.roundID].customProperties.allowedLanguages;
+            }
 
             // set user data
             $scope.tests = component.testCases;
@@ -452,17 +460,21 @@ var userCodingCtrl = ['$scope', '$stateParams', '$rootScope', 'socket', '$window
                 $rootScope.currentModal.dismiss('cancel');
                 $rootScope.currentModal = undefined;
             }
-            if ($scope.currentStateName() === helper.STATE_NAME.Coding) {
+            if ($rootScope.previousStateName === helper.STATE_NAME.Coding) {
                 if ($scope.username()) {
                     socket.emit(helper.EVENT_NAME.CloseProblemRequest, {
                         problemID: $scope.componentID,
                         writer: $scope.username()
                     });
                 }
-            } else {
+            } else if ($rootScope.previousStateName === helper.STATE_NAME.ViewCode) {
                 socket.emit(helper.EVENT_NAME.CloseProblemRequest, {
                     problemID: $scope.componentID,
                     writer: $scope.defendant
+                });
+            } else if ($rootScope.previousStateName === helper.STATE_NAME.PracticeCode) {
+                socket.emit(helper.EVENT_NAME.CloseProblemRequest, {
+                    problemID: $scope.componentID
                 });
             }
         }
@@ -477,7 +489,11 @@ var userCodingCtrl = ['$scope', '$stateParams', '$rootScope', 'socket', '$window
         // load problem depended on states
         if ($scope.currentStateName() === helper.STATE_NAME.Coding) {
             if ($scope.problemID) {
-                round = $rootScope.roundData[$scope.roundID] ? $rootScope.roundData[$scope.roundID] : $rootScope.practiceRoundData[$scope.roundID];
+                if ($rootScope.roundData[$scope.roundID]) {
+                    round = $rootScope.roundData[$scope.roundID];
+                } else {
+                    round = $rootScope.practiceRoundData[$scope.roundID];
+                }
                 if (round) {
                     if (round.problems) {
                         if (angular.isDefined(round.problems[$scope.divisionID])) {
@@ -485,11 +501,9 @@ var userCodingCtrl = ['$scope', '$stateParams', '$rootScope', 'socket', '$window
                                 if (problem.problemID === $scope.problemID) {
                                     $scope.problem = problem;
                                     $scope.componentID = problem.components[0].componentID;
-
                                     socket.emit(helper.EVENT_NAME.CloseProblemRequest, {
                                         problemID: $scope.componentID
                                     });
-
                                     $timeout(function () {
                                         socket.emit(helper.EVENT_NAME.OpenComponentForCodingRequest, {
                                             componentID: $scope.componentID,
@@ -522,6 +536,19 @@ var userCodingCtrl = ['$scope', '$stateParams', '$rootScope', 'socket', '$window
                     roomID: $stateParams.roomId
                 });
             }, 100);
+        } else if ($scope.currentStateName() === helper.STATE_NAME.PracticeCode) {
+            $scope.componentID = Number($stateParams.componentId);
+            socket.emit(helper.EVENT_NAME.CloseProblemRequest, {
+                problemID: $scope.componentID
+            });
+            $timeout(function () {
+                socket.emit(helper.EVENT_NAME.OpenComponentForCodingRequest, {
+                    componentID: $scope.componentID,
+                    handle: $scope.username()
+                });
+            }, 100);
+            socket.emit(helper.EVENT_NAME.MoveRequest, { moveType: helper.ROOM_TYPE_ID.PracticeRoom, roomID: $stateParams.roomId });
+            socket.emit(helper.EVENT_NAME.EnterRequest, { roomID: -1 });
         }
     }];
 

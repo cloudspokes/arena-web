@@ -65,8 +65,11 @@
  * - Added new directory codingTime
  * - Added new controller userCodingTimeCtrl
  *
+ * Changes in version 1.18 (Module Assembly - Web Arena - Code With Practice Problem)
+ * - Added user.practiceCode state.
+ *
  * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee, TCSASSEMBLER
- * @version 1.17
+ * @version 1.18
  */
 'use strict';
 /*jshint -W097*/
@@ -330,6 +333,15 @@ main.config([ '$stateProvider', '$urlRouterProvider', 'themerProvider', '$httpPr
             data: {
                 pageTitle: "View Code",
                 pageMetaKeywords: "code,arena"
+            },
+            templateUrl: 'partials/user.coding.html',
+            controller: 'userCodingCtrl'
+        })
+        .state('user.practiceCode', {
+            url: '/practiceCode/{roundId}/{componentId}/{divisionId}/{roomId}',
+            data: {
+                pageTitle: "Practice",
+                pageMetaKeywords: "practice,code,arena"
             },
             templateUrl: 'partials/user.coding.html',
             controller: 'userCodingCtrl'

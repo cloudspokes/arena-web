@@ -60,8 +60,11 @@
  * Changes in version 1.14 (Module Assembly - Web Arena Bug Fix 20140909):
  * - Changed the popup location for registration modal.
  *
- * @author dexy, amethystlei, ananthhh, flytoj2ee
- * @version 1.14
+ * Changes in version 1.15 (Module Assembly - Web Arena - Code With Practice Problem)
+ * - Changed the open practice problem logic.
+ *
+ * @author dexy, amethystlei, ananthhh, flytoj2ee, TCASSEMBLER
+ * @version 1.15
  */
 'use strict';
 /*jshint -W097*/
@@ -597,37 +600,16 @@ var baseCtrl = ['$rootScope', '$scope', '$http', 'appHelper', 'notificationServi
     };
 
     /**
-     * Open contest creation wizard
+     * Open practice problem.
      */
     $scope.openProblem = function () {
-        $scope.componentID = 2021;
-
-        $scope.$state.go(helper.STATE_NAME.Coding, {
+        $scope.$state.go(helper.STATE_NAME.PracticeCode, {
             roundId: 13674,
             problemId: 10195,
-            divisionId: 2
-        });
-
-        socket.on('RoomInfoResponse', function(data) {
-            console.log('info', 'Loading problem....');
-            
-            socket.emit('OpenComponentForCodingRequest', { 
-                componentID: 2021,
-                handle: $scope.username()
-            }); 
-        });
-
-        socket.on('OpenComponentResponse', function(data) {
-            console.log(data);
-        });
-
-        socket.on('GetProblemResponse', function (data) {
-            console.log(data);
-
-        });
-
-        socket.emit('MoveRequest', { moveType: 4, roomID: 299156 });
-        socket.emit('EnterRequest', { roomID: -1 });
+            divisionId: 2,
+            componentId: 2021,
+            roomId: 299156
+        }, {reload: true});
     };
 }];
 
