@@ -917,13 +917,13 @@ var baseCtrl = ['$rootScope', '$scope', '$http', 'appHelper', 'notificationServi
     /**
      * Open practice problem.
      */
-    $scope.openProblem = function () {
+    $scope.openProblem = function (roundId, problemId, divisionId, componentId, roomId) {
         $scope.$state.go(helper.STATE_NAME.PracticeCode, {
-            roundId: 13674,
-            problemId: 10195,
-            divisionId: 2,
-            componentId: 2021,
-            roomId: 299156
+            roundId: roundId,
+            problemId: problemId,
+            divisionId: divisionId,
+            componentId: componentId,
+            roomId: roomId
         }, {reload: true});
     };
 }];

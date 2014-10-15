@@ -2,7 +2,7 @@
     <div class="row-fluid dashboard contest detailPage contestManagement practiceProblemList">
         <div class="col-lg-12 text-left titleBar">
             <div class="col-lg-6 col-md-7">
-                <h1 class="title">Practices Room</h1>
+                <h1 class="title">Practice Problems</h1>
             </div>
         </div>
         <div class="container-fluid row-fluid mainContent">
@@ -115,7 +115,7 @@
                                     </thead>
                                     <tbody>
                                         <tr data-ng-repeat="item in problems">
-                                            <td class="colName"><a data-ng-bind-html="item.problemName | highlight:searchText:false"></a></td>
+                                            <td class="colName"><a data-ng-click="openProblem(item.roundId, item.problemId, item.divisionId, item.componentId, item.roomId);" data-ng-bind-html="item.problemName | highlight:searchText:false"></a></td>
                                             <td class="colType">{{item.problemType}}</td>
                                             <td class="colPoints {{item.pointsColor}}">{{item.points}}</td>
                                             <td class="colDifficulty">{{item.difficulty}}</td>

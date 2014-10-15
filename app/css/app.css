@@ -5412,10 +5412,10 @@ footer .right>span:nth-child(2) {
 }
 /*practice problem list*/
 .practiceProblemList .titleBar {
-    height: 113px;
+    height: 0px;
 }
 .practiceProblemList .titleBar .title {
-    margin-top: 34px;
+    margin-top: 7px;
 }
 .practiceProblemList .panel {
     min-height: 738px;
