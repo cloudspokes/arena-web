@@ -759,7 +759,8 @@ var baseCtrl = ['$rootScope', '$scope', '$http', 'appHelper', 'notificationServi
      */
     $rootScope.getCurrentLeaderboard = function (viewOn, roomID) {
         if (viewOn === 'room') {
-            return $rootScope.roomData[roomID].coders;
+            return angular.isDefined($rootScope.roomData[roomID]) && angular.isDefined($rootScope.roomData[roomID].coders)
+                ? $rootScope.roomData[roomID].coders : [];
         }
         if (viewOn === 'divOne' || viewOn === 'divTwo') {
             return $rootScope.leaderboard;
