@@ -1137,7 +1137,9 @@ footer .right .sponsorLogo {
     min-height: 80px;
 }
 .testReportPanel .reportItem .textGray {color: #687376; }
-
+.registrantCountry {
+    color: #ccc;
+}
 /*Media blocks should be placed after the normal code!!!*/
 /*bootstrap small devices tablets*/
 @media only screen and (max-width: 991px) {
