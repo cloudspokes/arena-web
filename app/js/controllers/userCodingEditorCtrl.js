@@ -43,8 +43,14 @@
  * Changes in version 1.11 (Module Assembly - Web Arena Bug Fix 20140909):
  * - Fixed the issues in coding editor.
  *
- * @author tangzx, amethystlei, flytoj2ee, TCASSEMBLER
- * @version 1.11
+ * Changes in version 1.12 (Module Assembly - Web Arena - Code With Practice Problem)
+ *  - Added checking logic for practice code state.
+ *
+ * Changes in version 1.13 (Module Assembly - Web Arena Bug Fix 14.10 - 1):
+ * - Fixed issues of the coding editor and the test report.
+ *
+ * @author tangzx, amethystlei, flytoj2ee
+ * @version 1.13
  */
 'use strict';
 /*global module, CodeMirror, angular, document, $, window */
@@ -107,7 +113,16 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
                 }
             ],
             userInputDisabled = false,
-            modalTimeoutPromise = null;
+            modalTimeoutPromise = null,
+            /**
+             * Close the dropdown.
+             */
+            closeDropdown = function () {
+                var isOpen = angular.element('.dropdown').hasClass('open');
+                if (isOpen) {
+                    angular.element('.dropdown').trigger('click');
+                }
+            };
 
         $scope.gotoLine = "";
         $scope.markedSearched = [];
@@ -129,6 +144,13 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
                     $scope.markedSearched.push($scope.cm.markText(cursor.from(), cursor.to(), {className: "searched"}));
                 }
 
+                if ($scope.searchText.length > 0 && $scope.markedSearched.length === 0) {
+                    $scope.openModal({
+                        title: 'Warning',
+                        message: 'No matched text found!',
+                        enableClose: true
+                    });
+                }
             }
         };
 
@@ -206,7 +228,7 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
          * Enable user inputs.
          */
         function enableUserInput() {
-            if ($scope.currentStateName() === helper.STATE_NAME.Coding) {
+            if ($scope.currentStateName() === helper.STATE_NAME.Coding || $scope.currentStateName() === helper.STATE_NAME.PracticeCode) {
                 userInputDisabled = false;
                 enableEditor();
             }
@@ -260,8 +282,8 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
          * Toggle settings.
          */
         $scope.toggleSettings = function () {
-            if ($scope.currentStateName() !== helper.STATE_NAME.Coding) {
-                // disable when it is not in the state user.coding
+            if ($scope.currentStateName() !== helper.STATE_NAME.Coding && $scope.currentStateName() !== helper.STATE_NAME.PracticeCode) {
+                // disable when it is not in the state user.coding or user.practiceCode
                 return;
             }
             $scope.settingsOpen = !$scope.settingsOpen;
@@ -396,6 +418,7 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
          */
         $scope.setThemeIdx = function (themeIdx) {
             $scope.themeIdx = themeIdx;
+            closeDropdown();
         };
 
         // init language settings
@@ -431,6 +454,7 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
             $scope.langIdx = langIdx;
 
             updateArgTypeAndMethod($scope.lang($scope.langIdx).id);
+            closeDropdown();
         };
 
         // init show/hide line number settings
@@ -443,7 +467,7 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
         $scope.isTesting = false;
         $scope.caseIndex = null;
 
-        if ($scope.currentStateName() === helper.STATE_NAME.Coding) {
+        if ($scope.currentStateName() === helper.STATE_NAME.Coding || $scope.currentStateName() === helper.STATE_NAME.PracticeCode) {
             $scope.panelName = 'Test Panel';
         } else if ($scope.currentStateName() === helper.STATE_NAME.ViewCode) {
             $scope.panelName = 'Challenge';
@@ -828,12 +852,13 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
                         return false;
                     }
                 }
-                if ($scope.currentStateName() === helper.STATE_NAME.Coding) {
+                if ($scope.currentStateName() === helper.STATE_NAME.Coding || $scope.currentStateName() === helper.STATE_NAME.PracticeCode) {
                     if ($scope.userData.tests.length === 0 && $rootScope.userTests.length === 0) {
                         return false;
                     }
                 }
-                return $scope.currentStateName() === helper.STATE_NAME.Coding || !!$scope.customChecked;
+                return ($scope.currentStateName() === helper.STATE_NAME.Coding || $scope.currentStateName() === helper.STATE_NAME.PracticeCode)
+                    || !!$scope.customChecked;
             };
 
             /**
@@ -841,7 +866,7 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
              * @returns {boolean} the checked result.
              */
             $scope.isSelectedAllDisable = function () {
-                if ($scope.currentStateName() === helper.STATE_NAME.Coding) {
+                if ($scope.currentStateName() === helper.STATE_NAME.Coding || $scope.currentStateName() === helper.STATE_NAME.PracticeCode) {
                     if ($scope.userData.tests.length === 0 && $rootScope.userTests.length === 0) {
                         return true;
                     }
@@ -884,8 +909,8 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
             // $scope.showLineNumber = $scope.userData.showLineNumber ? true : false;
 
             $scope.settingChanged();
-            // enable the editior only when it is at the state helper.STATE_NAME.Coding.
-            enableEditor($scope.currentStateName() === helper.STATE_NAME.Coding);
+            // enable the editior only when it is at the state helper.STATE_NAME.Coding or PracticeCode.
+            enableEditor($scope.currentStateName() === helper.STATE_NAME.Coding || $scope.currentStateName() === helper.STATE_NAME.PracticeCode);
 
             // comment out auto-compile & auto-save related code for now
             /*

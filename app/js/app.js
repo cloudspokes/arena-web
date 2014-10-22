@@ -67,9 +67,19 @@
  * Changes in version 1.18 (Module Assembly - Web Arena UI - Contest Management and Problem Assignment v1.0)
  * - Added contestManagementCtrl
  *
- * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee, TCSASSEMBLER
- * @version 1.17
- * 
+ * Changes in version 1.19 (Module Assembly - Web Arena UI - Match Summary Widget):
+ * - Initialized leaderboard to the empty array.
+ * - Updated routing to user.viewCode and user.contest including the last view and page visited
+ *   to support better forward/back navigation.
+ *
+ * Changes in version 1.20 (Module Assembly - Practice Problem Listing Page):
+ * - Updated to include resources for Practice Problem List page.
+ *
+ * Changes in version 1.21 (Module Assembly - Web Arena - Code With Practice Problem)
+ * - Added user.practiceCode state.
+ *
+ * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee
+ * @version 1.21
  */
 'use strict';
 /*jshint -W097*/
@@ -158,6 +168,7 @@ controllers.contestManagementCtrl = require('./controllers/contestManagementCtrl
 controllers.activeUsersCtrl = require('./controllers/activeUsersCtrl');
 controllers.overviewLeaderboardCtrl = require('./controllers/overviewLeaderboardCtrl');
 controllers.userCodingTimeCtrl = require('./controllers/userCodingTimeCtrl');
+controllers.practiceProblemListCtrl = require('./controllers/practiceProblemListCtrl');
 
 // load directives
 directives.leaderboardusers = require('./directives/leaderboardusers');
@@ -216,6 +227,7 @@ main.factory('notificationService', factories.notificationService);
 main.filter('showByMonth', filters.showByMonth);
 main.filter('startFrom', filters.startFrom);
 main.filter('highlight', filters.highlight);
+main.filter('practiceProblemFilter', filters.practiceProblemFilter);
 
 /////////////////
 // CONTROLLERS //
@@ -245,6 +257,7 @@ main.controller('contestManagementCtrl', controllers.contestManagementCtrl);
 main.controller('activeUsersCtrl', controllers.activeUsersCtrl);
 main.controller('overviewLeaderboardCtrl', controllers.overviewLeaderboardCtrl);
 main.controller('userCodingTimeCtrl', controllers.userCodingTimeCtrl);
+main.controller('practiceProblemListCtrl', controllers.practiceProblemListCtrl);
 
 /////////////////
 // DIRECTIVES //
@@ -332,7 +345,7 @@ main.config([ '$stateProvider', '$urlRouterProvider', 'themerProvider', '$httpPr
             controller: 'userCodingCtrl'
         })
         .state('user.viewCode', {
-            url: '/viewCode/{roundId}/{componentId}/{divisionId}/{roomId}/{defendant}',
+            url: '/viewCode/{roundId}/{componentId}/{divisionId}/{roomId}/{defendant}/{page}',
             data: {
                 pageTitle: "View Code",
                 pageMetaKeywords: "code,arena"
@@ -340,8 +353,17 @@ main.config([ '$stateProvider', '$urlRouterProvider', 'themerProvider', '$httpPr
             templateUrl: 'partials/user.coding.html',
             controller: 'userCodingCtrl'
         })
+        .state('user.practiceCode', {
+            url: '/practiceCode/{roundId}/{componentId}/{divisionId}/{roomId}',
+            data: {
+                pageTitle: "Practice",
+                pageMetaKeywords: "practice,code,arena"
+            },
+            templateUrl: 'partials/user.coding.html',
+            controller: 'userCodingCtrl'
+        })
         .state('user.contest', {
-            url: '/contests/{contestId}',
+            url: '/contests/{contestId}/{viewOn}',
             data: {
                 pageTitle: "Contest",
                 pageMetaKeywords: "contest"
@@ -360,6 +382,15 @@ main.config([ '$stateProvider', '$urlRouterProvider', 'themerProvider', '$httpPr
             },
             templateUrl: 'partials/user.contest.detail.html',
             controller: 'userContestDetailCtrl'
+        })
+        .state('user.practiceProblemList', {
+            url: '/practiceProblemList',
+            data: {
+                pageTitle: 'Practice Problems',
+                pageMetaKeywords: "practice problems"
+            },
+            templateUrl: 'partials/user.practiceProblemList.html',
+            controller: 'practiceProblemListCtrl'
         })
         .state('user.contestManagement', {
             url: '/contestManagement',
@@ -470,6 +501,7 @@ main.run(['$rootScope', '$state', 'sessionHelper', 'socket', '$window', 'tcTimeS
     $rootScope.connectionID = undefined;
     $rootScope.startSyncResponse = false;
     $rootScope.lastServerActivityTime = new Date().getTime();
+    $rootScope.leaderboard = [];
     $rootScope.$on('$stateChangeStart', function (event, toState) {
         //use whitelist approach
         var allowedStates = [helper.STATE_NAME.Anonymous, helper.STATE_NAME.AnonymousHome, helper.STATE_NAME.LoggingIn, helper.STATE_NAME.Logout],

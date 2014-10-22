@@ -51,8 +51,7 @@ body{
 .panelCodeEditor .panel-body .settingsPanel {
     background-image: url(../img/orange/popup-bg.png);
 }
-.anon-header .navbar .navbar-brand,
-.header .navbar-brand,
+
 .header .navIcons>li>.icon:before,
 .header .pastNoti,
 .userInfo .notification,
@@ -61,6 +60,7 @@ body{
 .header .navIcons .themePanel .themeItem .themeRadio:checked ~ .themeLbl:before {
     background-image: url(../img/sprite-new-header.png);
 }
+
 .anon-header,
 .header {
     background-image: url(../img/black-header.png);
@@ -123,8 +123,16 @@ body{
 .problemAssignmentPanel .searchIcon:before,
 .problemAssignmentPanel .searchArea .tags .closeIcon:before,
 .problemAssignmentPanel .dropdown .arrow,
-.problemAssignmentPanel .colAction .delBtn:before  {
+.problemAssignmentPanel .colAction .delBtn:before,
+.problemListPanel .searchIcon:before,
+.problemListPanel .searchArea .tags .closeIcon:before,
+.problemListPanel .dropdown .arrow {
     background-image: url(../img/orange/sprite-contestManagement.png);
+    background-repeat: no-repeat;
+}
+.practiceProblemFilter.qtip-default,
+.problemListPanel .statusIcon:before{
+    background-image: url(../img/orange/sprite-practiceRoom.png);
     background-repeat: no-repeat;
 }
 /***************header style*/
@@ -243,6 +251,9 @@ body{
 .dashboard .definition .item span,
 .tcTime>span {
     color: #fff;/*#ff8a00*/
+}
+.dashboard .definition .item .textWhite {
+    color: #E49B9B !important;
 }
 .codeArea .shareLink > ul > li > a:hover {color: #ff8a00;}
 .codeArea .shareLink > ul > .open > a {color: #ff8a00;}
@@ -672,7 +683,7 @@ footer .left>span {
     border-bottom: 1px solid #ffe6c7;
 }
 .panelContestStat .breadcrumbHead {
-    padding: 9px 0 7px 28px;
+    padding: 9px 0 7px 10px;
 }
 .panelContestStat .breadcrumbHead .breadcrumb .active {
     color: #ff890c;
@@ -733,7 +744,6 @@ footer .left>span {
 .panelOverview .panel-body .contentWrapper {
     background: #fff;
     border: 1px solid #e7e7e7;
-    border-bottom-width: 0;
     height: 230px;
     margin-top: 4px;
     margin-bottom: 3px;
@@ -825,6 +835,7 @@ footer .left>span {
 /*room summary widget in contest page*/
 .panelSummary {
     border-color: #e7e7e7;
+    height: 277px;
 }
 .panelSummary .panel-heading {
     background: #f0f0f0;
@@ -832,6 +843,7 @@ footer .left>span {
 .panelSummary .panel-body {
     background: #fffffd;
     color: #636d70;
+    padding: 7px 14px 0px 30px;
 }
 .panelSummary .panel-body .summaryWrapper {
     border-color: #ff8a00;
@@ -948,7 +960,8 @@ footer .left>span {
 .filterPanel .closeLink {
     color: #333;
 }
-.filterPanel .contentWrapper label {
+.filterPanel .contentWrapper label,
+.practiceProblemFilter .pointRow span {
     color: #333;
 }
 .filterPanel .contentWrapper .dropdown,
@@ -983,6 +996,14 @@ footer .left>span {
     border-top: 8px solid #fff;
     border-bottom-width: 3px;
     border-color: #fff;
+}
+
+/*common style of table in detail page */
+.panelSummary .shortLeaderboard .table>thead:first-child>tr:first-child>th {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-top: 0px solid #fff;
+    border-bottom-width: 0px;
 }
 .detailPage .table>tbody>tr:first-child>td {
     border-top: 1px solid #ffe6c7;
@@ -1122,7 +1143,8 @@ footer .left>span {
 }
 .contestManagement .table .viewBtn,
 .problemAssignmentPanel .tags label,
-.problemAssignmentPanel .colAction .editBtn  {
+.problemAssignmentPanel .colAction .editBtn,
+.problemListPanel .tags label  {
     background: #eaeaea;
     color: #656565;
 }
@@ -1161,12 +1183,26 @@ footer .left>span {
     color: #fff;
 }
 .problemAssignmentPanel .dropdown-toggle,
-.problemAssignmentPanel .search input {
+.problemAssignmentPanel .search input,
+.problemListPanel .search input {
+    color: #687376;
+}
+.problemListPanel .search input::-webkit-input-placeholder{
+    color: #687376;
+}
+.problemListPanel .search input:-moz-placeholder{
+    color: #687376;
+}
+.problemListPanel .search input::-moz-placeholder{
+    color: #687376;
+}
+.problemListPanel .search input:-ms-input-placeholder{
     color: #687376;
 }
 .problemAssignmentPanel .dropdown,
 .problemAssignmentPanel .inputBorder,
-.problemAssignmentPanel .searchArea .search{
+.problemAssignmentPanel .searchArea .search,
+.problemListPanel .searchArea .search{
     border-color: #e7e7e7;
 }
 .problemAssignmentPanel .panel-footer,
@@ -1188,6 +1224,42 @@ footer .left>span {
 .problemAssignmentPanel .assignedProblems .table>thead:first-child>tr:first-child>th {
     padding-top: 0;
     padding-bottom: 3px;
+}
+.practiceProblemList .resultCount {
+    color: #555;
+}
+.practiceProblemList .table a {
+    color: #FF890C;
+}
+.practiceProblemList .table tbody .colDifficulty,
+.practiceProblemList .table tbody .colType {
+    color: #333;
+}
+.practiceProblemList .table tbody .colMyPoints {
+    color: #424242;
+}
+.practiceProblemList .table tbody .colPoints.red {
+    color: #c60909;
+}
+.practiceProblemList .table tbody .colPoints.yellow {
+    color: #fed73a;
+}
+.practiceProblemList .table tbody .colPoints.blue {
+    color: #3477ff;
+}
+.practiceProblemList .table>thead:first-child>tr:first-child>th {
+    /*fix header padding*/
+    padding-top: 20px;
+    padding-bottom: 24px;
+}
+.practiceProblemList .iconNew {
+    color: #e09d0e;
+}
+.practiceProblemList .iconViewed {
+    color: #008888;
+}
+.practiceProblemList .iconSolved {
+    color: #a2eb23;
 }
 /*bootstrap small devices tablets*/
 @media only screen and (max-width: 991px) {
@@ -1242,10 +1314,8 @@ footer .left>span {
 .roomsDiv a:hover {
     color: #ff8a00;
 }
-.coder-history-span {
+.coderHistoryTblDiv .coderHistoryTable>tbody>tr>td {
     border-color: #ffe6c7;
-    border-top-width: 1px;
-    border-top-style: solid;
 }
 .registration-modal-body .title{
     padding-top: 10px;
@@ -1323,4 +1393,44 @@ footer .left>span {
 .leadarboardList .ngsb-scrollbar,
 .activeUserList .ngsb-scrollbar{
     background: #fff;
+}
+
+.dashboard .textBlack{
+    color: #687376!important;
+
+/*Media blocks should be placed after the normal code!!!*/
+/*bootstrap small devices tablets*/
+@media only screen and (max-width: 991px) {
+    .header .navIcons > li {
+        background-image: url(../img/black-header.png);
+    }
+    .header .timeItem,
+    .header .navbar-right .userInfo {
+        background-image: url(../img/black-header.png);
+    }
+}
+/* boostrap extra small devices */
+@media only screen and (max-width: 767px) {
+    .panel-custom .tabs .altNav .dropdown-toggle {
+        color: #ff8a00;
+    }
+    .panel-custom .tabs .altNav .dropdown-toggle:hover,
+    .panel-custom .tabs .altNav .open a:hover {
+        background: #ff8a00;
+    }
+    .hero .loginBox footer .sponsorLogo {
+        background-image: url(../img/orange/company_logo_small.png);
+    }
+}
+/* special sizes which widget will overflow */
+@media only screen and (max-width: 668px) {
+    .panelChatArea .membersInfo{
+        border-bottom: 1px solid #e7e7e7;
+    }
+}
+@media only screen and (max-width: 421px) {
+    .panelContestStat .breadcrumbHead {
+        white-space: normal;
+        height: 63px;
+    }
 }
