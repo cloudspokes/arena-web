@@ -969,7 +969,7 @@ footer .right>span:nth-child(2) {
 /* ** /.Fix to page move right ** */
 
 .modal .modal-dialog {
-    padding-top: 10%;
+    /*padding-top: 10%;*/
 }
 @media only screen and (min-height: 509px) and (min-width: 768px) {
     .modal .modal-dialog {
@@ -5727,8 +5727,11 @@ footer .right>span:nth-child(2) {
     height: 26px;
     border-top: 1px solid;
 }
+.coderHistoryTblDiv .coderHistoryTable>tbody>tr>td:last-child {
+    border-bottom: 1px solid;
+}
 .coderHistoryColTime {
-    width: 130px;
+    width: 150px;
 }
 .coderHistoryColAction {
     width: 95px;
