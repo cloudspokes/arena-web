@@ -169,6 +169,7 @@ controllers.activeUsersCtrl = require('./controllers/activeUsersCtrl');
 controllers.overviewLeaderboardCtrl = require('./controllers/overviewLeaderboardCtrl');
 controllers.userCodingTimeCtrl = require('./controllers/userCodingTimeCtrl');
 controllers.practiceProblemListCtrl = require('./controllers/practiceProblemListCtrl');
+controllers.memberFeedbackCtrl = require('./controllers/memberFeedbackCtrl');
 
 // load directives
 directives.leaderboardusers = require('./directives/leaderboardusers');
@@ -196,6 +197,7 @@ directives.activeUser = require('./directives/activeUser');
 directives.overviewLeaderboard = require('./directives/overviewLeaderboard');
 directives.twitter = require('./directives/twitter');
 directives.codingTime = require('./directives/codingTime');
+directives.memberFeedback = require('./directives/memberFeedback');
 
 /*global $ : false, angular : false, twttr : true */
 /*jslint nomen: true, browser: true */
@@ -258,6 +260,7 @@ main.controller('activeUsersCtrl', controllers.activeUsersCtrl);
 main.controller('overviewLeaderboardCtrl', controllers.overviewLeaderboardCtrl);
 main.controller('userCodingTimeCtrl', controllers.userCodingTimeCtrl);
 main.controller('practiceProblemListCtrl', controllers.practiceProblemListCtrl);
+main.controller('memberFeedbackCtrl', controllers.memberFeedbackCtrl);
 
 /////////////////
 // DIRECTIVES //
@@ -287,6 +290,7 @@ main.directive('activeuser', directives.activeUser);
 main.directive('overviewleaderboard', directives.overviewLeaderboard);
 main.directive('twitter', directives.twitter);
 main.directive('codingTime', directives.codingTime);
+main.directive('memberFeedback', directives.memberFeedback);
 
 //////////////////////////////////////
 // ROUTING AND ROUTING INTERCEPTORS //
