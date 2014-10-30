@@ -748,7 +748,7 @@ body a {cursor: pointer;}
 }
 .tcTime {
     display: block;
-    width: 240px;  
+    width: 240px;
     padding-right: 33px;
     font-size: 14px;
     text-align: right;
@@ -1052,7 +1052,7 @@ footer .right>span:nth-child(2) {
 }
 .modal .modal-content .modal-body p {
     margin: auto 20px;
-    overflow-x: auto; 
+    overflow-x: auto;
 }
 .modal .modal-content .wizardBody p {
     margin: 0;
@@ -4334,6 +4334,18 @@ footer .right>span:nth-child(2) {
     min-height: 130px;
 }
 
+.detailPage .shortLeaderboard .moreProblemTbl .table th,
+.detailPage .shortLeaderboard.moreProblemTbl .table td {
+    padding-right: 0;
+    padding-left: 4px;
+}
+.shortLeaderboard .leaderboardWrapper .moreProblemTbl .table .col2 {
+    width: 20%;
+}
+.shortLeaderboard .leaderboardWrapper .moreProblemTbl .table .colProblem {
+    min-width: 71px;
+}
+
 .detailPage section .tableDiv .innerWrapper,
 .detailPage section .tHeadDiv .innerWrapper,
 .modal-body .tHeadDiv .innerWrapper,
@@ -4799,7 +4811,7 @@ footer .right>span:nth-child(2) {
     padding-left: 12px;
     padding-right: 0;
 }
-.contestManagement .panel-body .tabs, 
+.contestManagement .panel-body .tabs,
 .contestManagement .panel-body .content {
     padding: 0 28px 0 29px;
     position: relative;
@@ -4811,13 +4823,13 @@ footer .right>span:nth-child(2) {
     padding: 0 25px;
     position: relative;
     cursor: pointer;
-} 
+}
 .contestManagement .tabs .nav li:hover {
     /*text-decoration: underline;*/
 }
 .contestManagement .tabs .nav li:nth-child(2) {
     padding: 0 27px;
-} 
+}
 .contestManagement .tabs .nav li:last-child {
     padding: 0 24px;
 }
@@ -4923,7 +4935,7 @@ footer .right>span:nth-child(2) {
     margin-bottom: 2px;
 }
 .contestManagement .table>tbody>tr:last-child>td {
-    border-bottom-width: 0; 
+    border-bottom-width: 0;
 }
 .contestManagement .table>thead>tr>th {
     line-height: 1.29em;
@@ -5049,7 +5061,7 @@ footer .right>span:nth-child(2) {
 }
 .popupOpen .problemAssignmentPanel {
     overflow-x: auto;
-    overflow-y: auto;  
+    overflow-y: auto;
 }
 .problemAssignmentPanel {
     display: none;
@@ -7599,7 +7611,7 @@ table thead .sort.desc{
     .coderHistoryTblDiv {
         padding: 0 5px;
     }
-    .coderHistoryTblDiv .coderHistoryTable>tbody>tr>td, 
+    .coderHistoryTblDiv .coderHistoryTable>tbody>tr>td,
     .coderHistoryTblDiv .coderHistoryTable>thead>tr>th {
         padding-left: 0;
         padding-bottom: 0;
