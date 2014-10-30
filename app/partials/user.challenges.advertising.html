@@ -1,0 +1,17 @@
+﻿<carousel interval="interval" data-ng-if="challenges.length > 0">
+    <slide data-ng-repeat="challenge in challenges | orderBy:'end'">
+        <div class="challenge-advertisement {{challenge.type}}-challenge">
+            <span class="challenge-icon">{{challenge.iconText}}</span>
+            <span class="challenge-prize">{{challenge.prize}}</span>
+            <a class="challenge-title" href="">{{challenge.title}}</a>
+            <timer data-end-time="challenge.end" class="challenge-timer">
+                <span>{{days || hours || minutes || seconds ? "Time Left:" : "Challenge Finished"}}</span>
+                <span data-ng-show="days > 0" class="time-value">{{days}} day{{daysS}}</span>
+                <span data-ng-show="hours > 0" class="time-value">{{hours}} hour{{hoursS}}</span>
+                <span data-ng-show="minutes > 0" class="time-value">{{minutes}} minute{{minutesS}}</span>
+                <span data-ng-show="seconds > 0" class="time-value">{{seconds}} second{{secondsS}}</span>
+            </timer>
+            <span class="challenge-technologies" data-ng-repeat="technology in challenge.technologies">{{technology}}</span>
+        </div>
+    </slide>
+</carousel>

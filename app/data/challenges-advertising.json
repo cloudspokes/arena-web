@@ -1,0 +1,18 @@
+﻿[
+    {
+        "type": "development",
+        "iconText": "C",
+        "prize": 60,
+        "title": "CSFV UI Registration Flow Pages Prototype Update",
+        "end": "2014-11-09T08:00Z",
+        "technologies": [ "Apex", "Salesforce", "VisualForce" ]
+    },
+    {
+        "type": "design",
+        "iconText": "W",
+        "prize": 750,
+        "title": "CSFV Homepage Redesign Concepts",
+        "end": "2014-11-28T13:00Z",
+        "technologies": ["CSFV", "Homepage", "Studio"]
+    }
+]
