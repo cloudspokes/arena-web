@@ -7692,9 +7692,13 @@ table thead .sort.desc{
 
 #challenges-advertiser .challenge-advertisement {
     line-height: 40px;   
-    text-align: left; 
+    text-align: left;
     white-space: nowrap;
-    overflow: hidden;
+}
+
+#challenges-advertiser .challenge-advertisement > * {
+    line-height: normal;
+    vertical-align: middle;
 }
 
 #challenges-advertiser .challenge-icon {
@@ -7717,7 +7721,7 @@ table thead .sort.desc{
 }
 
 /* Add word 'and' between visible time components */
-#challenges-advertiser .challenge-timer .ng-binding:not(.ng-hide) + .ng-binding:not(.ng-hide):before {
+#challenges-advertiser .challenge-timer .time-value:not(.ng-hide) + .time-value:not(.ng-hide):before {
     content: "and ";
 }
 
@@ -7807,6 +7811,21 @@ table thead .sort.desc{
 }
 
 
+#challenges-advertiser .challenge-technologies-wrapper {
+    display: inline-block;
+}
+
+#challenges-advertiser .challenge-timer,
+#challenges-advertiser .challenge-title,
+#challenges-advertiser .challenge-technologies-wrapper {
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+
 /* Styles for medium displays */
 @media (max-width: 1199px) {
     #challenges-advertiser .challenge-title:after {
@@ -7824,7 +7843,7 @@ table thead .sort.desc{
         padding: 10px 29px;
     }
 
-    #challenges-advertiser .challenge-advertisement {
+    #challenges-advertiser .challenge-advertisement > *:not(.challenge-icon) {
         line-height: 30px;
     }
 }
@@ -7835,11 +7854,10 @@ table thead .sort.desc{
     #challenges-advertiser .challenge-timer {
         border-right: none;
         display: block;
-        white-space: normal;
     }
 
-    #challenges-advertiser .challenge-technologies {
-        white-space: normal;
+    #challenges-advertiser .challenge-technologies-wrapper {
+        display: block;
     }
 }
 
@@ -7847,7 +7865,6 @@ table thead .sort.desc{
 @media (max-width: 600px) {
     #challenges-advertiser .challenge-title {
         display: block;
-        white-space: normal;
     }
 
     #challenges-advertiser .challenge-title:after {

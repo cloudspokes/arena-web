@@ -6,6 +6,7 @@ module.exports = {
     auth0clientID: '@@AUTH0_CLIENT_ID',
     auth0connection: '@@AUTH0_CONNECTION',
     callbackURL: '@@CALLBACK_URL',
+    challengeAdvertisingInterval: @@CHALLENGE_ADVERTISING_INTERVAL,
     webSocketURL: '@@WEB_SOCKET_URL',
     ssoKey: '@@SSO_KEY',
     connectionTimeout: @@CONNECTION_TIMEOUT,

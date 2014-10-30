@@ -64,3 +64,6 @@ set SUMMARY_TOPCODER_COUNT=4
 set PRACTICE_PROBLEM_LIST_PAGE_SIZE=10
 
 set REGISTRATION_URL=http://tcqa1.topcoder.com/?action=callback
+
+:: Time interval between challenge changes in challenge advertising widget (milliseconds)
+set CHALLENGE_ADVERTISING_INTERVAL=5000

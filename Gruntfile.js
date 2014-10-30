@@ -66,6 +66,7 @@ module.exports = function (grunt) {
                         { match : 'AUTH0_DOMAIN', replacement: process.env.AUTH0_DOMAIN },
                         { match : 'AUTH0_CONNECTION', replacement: process.env.AUTH0_CONNECTION },
                         { match : 'CALLBACK_URL', replacement: process.env.CALLBACK_URL },
+                        { match : 'CHALLENGE_ADVERTISING_INTERVAL', replacement: process.env.CHALLENGE_ADVERTISING_INTERVAL },
                         { match : 'WEB_SOCKET_URL', replacement: process.env.WEB_SOCKET_URL },
                         { match : 'API_DOMAIN', replacement: process.env.API_DOMAIN },
                         { match : 'SSO_KEY', replacement: process.env.SSO_KEY },
