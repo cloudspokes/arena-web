@@ -12,6 +12,7 @@
                         Topcoder Matches Problem List
                     </div>
                     <div class="panel-body">
+                        <div class="panel-content">
                         <div class="searchArea">
                             <div class="search">
                                 <input placeholder="Search" data-ng-model="searchText" data-ng-keypress="searchByText($event)" maxlength="32"/>
@@ -127,6 +128,8 @@
                             </div>
                         </div>
                         <!-- /.problemList -->
+                        </div>
+                        <!-- /.panel-content -->
                         <div class="paginator" data-ng-show="totalRecords > numOfPage">
                             <span data-ng-class="{'textActive': currentPage === 1}" data-ng-click="gotoPage(1)">1</span>
                             <span data-ng-show="currentPage > 3 && getTotalPages() > 6" class="skipSpan">...</span>
