@@ -631,7 +631,7 @@ footer .right .sponsorLogo {
     line-height: 40px;
 }
 .panelContestStat .breadcrumbHead .breadcrumb li:last-child {
-    padding-right: 11px; 
+    padding-right: 11px;
     float: right;
 }
 .panelContestStat .breadcrumbHead .breadcrumb li:before {
@@ -817,7 +817,7 @@ footer .right .sponsorLogo {
 }
 .rating-none,
 .rating-none:hover{
-    color: #000;
+    color: #fff;
 }
 .rating-admin,
 .rating-admin:hover{
