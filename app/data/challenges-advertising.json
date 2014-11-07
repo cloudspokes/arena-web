@@ -3,9 +3,9 @@
         "type": "development",
         "iconText": "C",
         "prize": 60,
-        "title": "CSFV UI Registration Flow Pages Prototype Update",
+        "title": "CSFV UI Registration Flow Pages Prototype Update, CSFV UI Registration Flow Pages Prototype Update, CSFV UI Registration Flow Pages Prototype Update",
         "end": "2014-11-03T15:14:54.796Z",
-        "technologies": [ "Apex", "Salesforce", "VisualForce" ]
+        "technologies": [ "CSFV", "Homepage", "Studio", "Random1", "Random2", "Random3", "Random4",  "Random5",  "Random6",  "Random7",  "Random8"    ]
     },
     {
         "type": "design",
@@ -21,6 +21,6 @@
         "prize": 1000,
         "title": "CSFV Homepage Redesign Concepts Challenge (this is very long title)",
         "end": "2014-11-11T13:00Z",
-        "technologies": ["CSFV", "Homepage", "Studio", "Random1", "Random2", "Random3", "Random4"]
+        "technologies": ["CSFV", "Homepage", "Studio", "Random1", "Random2", "Random3", "Random4", "Random5", "Random345"]
     }
 ]
