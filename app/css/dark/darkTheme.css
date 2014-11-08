@@ -1143,7 +1143,7 @@ footer .right .sponsorLogo {
 @media only screen and (max-width: 421px) {
     .panelContestStat .breadcrumbHead {height: 63px; }
 }
->>>>>>> 3bb67444dd36fd929dfa94cebe116707c2f71188
+
 .coder-history-modal-header {
     background-color:#1f444e!important;
 }
@@ -1225,8 +1225,12 @@ footer .right .sponsorLogo {
 }
 
 #challenges-advertiser .challenge-timer {
-    color: #cdcdcd;
     border-color: #1f444e;
+}
+
+#challenges-advertiser .challenge-timer  > * {
+	color: #fff;
+	opacity: 0.7;
 }
 
 #challenges-advertiser .challenge-prize {

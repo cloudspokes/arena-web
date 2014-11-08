@@ -7693,6 +7693,7 @@ table thead .sort.desc{
 #challenges-advertiser .challenge-advertisement {
     text-align: left;
     white-space: nowrap;
+	font-weight: 300;
 }
 
 #challenges-advertiser .challenge-advertisement > * {
@@ -7703,9 +7704,10 @@ table thead .sort.desc{
 #challenges-advertiser .challenge-icon {
 	display: inline-block;
     text-align: center;
-    font-size: 15px;
+    font-size: 14px;
     width: 22px;
     height: 22px;
+	line-height: 22px;
     border-radius: 2px;
 }
 
@@ -7716,7 +7718,7 @@ table thead .sort.desc{
 }
 
 #challenges-advertiser .challenge-title {
-    font-size: 13.5px;
+    font-size: 14px;
 }
 
 /* Add word 'and' between visible time components */
@@ -7788,24 +7790,6 @@ table thead .sort.desc{
 
 #challenges-advertiser .carousel-control.right .glyphicon {
     background-position: 0 0;
-}
-
-
-/* Styles for different challenge types */
-#challenges-advertiser .development-challenge .challenge-icon {
-    background: #7eb900;
-}
-
-#challenges-advertiser .development-challenge .challenge-title {
-    color: #7eb900;
-}
-
-#challenges-advertiser .design-challenge .challenge-icon {
-    background: #09baec;
-}
-
-#challenges-advertiser .design-challenge .challenge-title {
-    color: #09baec;
 }
 
 
