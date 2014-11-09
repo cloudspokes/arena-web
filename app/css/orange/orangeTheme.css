@@ -1463,8 +1463,9 @@ footer .left>span {
     background: #fff;
 }
 
-.dashboard .textBlack{
-    color: #687376!important;
+.dashboard .textBlack {
+    color: #687376 !important;
+}
 
 /*Media blocks should be placed after the normal code!!!*/
 /*bootstrap small devices tablets*/
@@ -1501,4 +1502,32 @@ footer .left>span {
         white-space: normal;
         height: 63px;
     }
+}
+
+
+
+/* 
+*    Styles for challenges advertisement widget
+*/
+
+#challenges-advertiser {
+    border: 1px solid #e7e7e7;
+    background: #fff;   
+}
+
+#challenges-advertiser .challenge-technologies-wrapper {
+    color: #636d70;
+}
+
+#challenges-advertiser .challenge-timer {
+    color: #333;
+    border-color: #e7e7e7;
+}
+
+#challenges-advertiser .challenge-prize {
+    color: #333;
+}
+
+#challenges-advertiser .challenge-icon {
+    color: #e9f2db;
 }

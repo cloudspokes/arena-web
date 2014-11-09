@@ -69,3 +69,6 @@ export SUMMARY_TOPCODER_COUNT=4
 export PRACTICE_PROBLEM_LIST_PAGE_SIZE=10
 
 export REGISTRATION_URL=http://tcqa1.topcoder.com/?action=callback
+
+# Time interval between challenge changes in challenge advertising widget (milliseconds)
+export CHALLENGE_ADVERTISING_INTERVAL=5000

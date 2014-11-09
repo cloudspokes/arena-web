@@ -78,12 +78,17 @@
  *
  * Changes in version 1.21 (Module Assembly - Web Arena - Code With Practice Problem)
  * - Added user.practiceCode state.
-
+ *
  * Changes in version 1.22 (Module Assembly - Web Arena UI - Match Configurations
  * - Added controllers -- contestTermsConfigCtrl, contestScheduleConfigCtrl, registrationQuestionsCtrl, manageQuestionCtrl, manageAnswerCtrl
  * - Added Directives -- contestTermsConfig, contestScheduleConfig, registrationQuestions, manageQuestion, manageAnswer
- * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee, TCSASSEMBLER
- * @version 1.22
+ * 
+ * Changes in version 1.23 (UI Prototype - Web Arena - Challenges Advertising Widget)
+ * - Added challengesAdvertisingCtrl controller
+ * - Added challengesAdvertiser directive
+ * 
+ * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee, Helstein, TCSASSEMBLER
+ * @version 1.23
  */
 'use strict';
 /*jshint -W097*/
@@ -178,6 +183,7 @@ controllers.manageQuestionCtrl = require('./controllers/manageQuestionCtrl');
 controllers.manageAnswerCtrl = require('./controllers/manageAnswerCtrl');
 controllers.userCodingTimeCtrl = require('./controllers/userCodingTimeCtrl');
 controllers.practiceProblemListCtrl = require('./controllers/practiceProblemListCtrl');
+controllers.challengesAdvertisingCtrl = require('./controllers/challengesAdvertisingCtrl');
 
 // load directives
 directives.leaderboardusers = require('./directives/leaderboardusers');
@@ -210,6 +216,7 @@ directives.contestScheduleConfig = require('./directives/contestScheduleConfig')
 directives.registrationQuestions = require('./directives/registrationQuestions');
 directives.manageQuestion = require('./directives/manageQuestion');
 directives.manageAnswer = require('./directives/manageAnswer');
+directives.challengesAdvertiser = require('./directives/challengesAdvertiser');
 
 /*global $ : false, angular : false, twttr : true */
 /*jslint nomen: true, browser: true */
@@ -277,6 +284,7 @@ main.controller('contestScheduleConfigCtrl', controllers.contestScheduleConfigCt
 main.controller('registrationQuestionsCtrl', controllers.registrationQuestionsCtrl);
 main.controller('manageQuestionCtrl', controllers.manageQuestionCtrl);
 main.controller('manageAnswerCtrl', controllers.manageAnswerCtrl);
+main.controller('challengesAdvertisingCtrl', controllers.challengesAdvertisingCtrl);
 
 /////////////////
 // DIRECTIVES //
@@ -311,6 +319,7 @@ main.directive('contestScheduleConfig', directives.contestScheduleConfig);
 main.directive('registrationQuestions', directives.registrationQuestions);
 main.directive('manageQuestion', directives.manageQuestion);
 main.directive('manageAnswer', directives.manageAnswer);
+main.directive('challengesAdvertiser', directives.challengesAdvertiser);
 
 //////////////////////////////////////
 // ROUTING AND ROUTING INTERCEPTORS //
