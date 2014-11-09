@@ -68,5 +68,6 @@ export SUMMARY_TOPCODER_COUNT=4
 
 export PRACTICE_PROBLEM_LIST_PAGE_SIZE=10
 
-# Google Docs Spreadsheet URL for saving feedbacks
+# Google Docs Spreadsheet URL for saving feedbacks and its maxlength
 export FEEDBACK_SPREADSHEET_URL=https://script.google.com/macros/s/AKfycbxSDbXXaz5y1wDKWa_XToU2yyi0yAvAobXh8vF2WuT3VrFd14YN/exec
+export FEEDBACK_MAXLENGTH=10000
