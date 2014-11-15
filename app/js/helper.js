@@ -82,8 +82,11 @@
  * Changes in version 1.21 (Module Assembly - Web Arena Bug Fix 14.10 - 2):
  *  - Updated LEADERBOARD_TABLE_REBUILT_TIMEGAP flag.
  *
+ * Changes in version 1.22 (Web Arena Plugin API Part 1):
+ * - Added plugin logic related event names.
+ *
  * @author tangzx, amethystlei, dexy, ananthhh, flytoj2ee, TCASSEMBLER
- * @version 1.21
+ * @version 1.22
  */
 
 module.exports = {
@@ -437,5 +440,32 @@ module.exports = {
         P : "Pending"
     },
     // Number of rounds per page
-    MANAGE_CONTESTS_PAGE_LENGTH : 10
+    MANAGE_CONTESTS_PAGE_LENGTH : 10,
+
+    // plugin event names.
+    PLUGIN_EVENT: {
+        roomChanged: 'roomChanged',
+        challengeSucceeded: 'challengeSucceeded',
+        challengeFailed: 'challengeFailed',
+        systemBroadcastReceived: 'systemBroadcastReceived',
+        solutionCompiled: 'solutionCompiled',
+        problemOpened: 'problemOpened',
+        problemClosed: 'problemClosed',
+        solutionTestFinished: 'solutionTestFinished',
+        solutionSubmitted: 'solutionSubmitted',
+        codingStart: 'codingStart',
+        codingEnd: 'codingEnd',
+        systemTestEnd: 'systemTestEnd'
+    },
+    // plugin broadcast event names.
+    BROADCAST_PLUGIN_EVENT: {
+        setCodeFromPlugin: 'setCodeFromPlugin',
+        searchFromPlugin: 'searchFromPlugin',
+        setLanguageFromPlugin: 'setLanguageFromPlugin',
+        compileFromPlugin: 'compileFromPlugin',
+        submitFromPlugin: 'submitFromPlugin',
+        runAllTestCasesFromPlugin: 'runAllTestCasesFromPlugin',
+        runTestCaseFromPlugin: 'runTestCaseFromPlugin',
+        setTestCasesFromPlugin: 'setTestCasesFromPlugin'
+    }
 };

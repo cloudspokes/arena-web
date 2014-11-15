@@ -70,8 +70,11 @@
  * - Fixed issues of the broadcast message format.
  * - Fixed some JSLint format in other projects.
  *
- * @author amethystlei, dexy, ananthhh, flytoj2ee
- * @version 1.16
+ * Changes in version 1.17 (Web Arena Plugin API Part 1):
+ * - Added plugin logic for global and editor events.
+ *
+ * @author amethystlei, dexy, ananthhh, flytoj2ee, TCASSEMBLER
+ * @version 1.17
  */
 ///////////////
 // RESOLVERS //
@@ -272,6 +275,8 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
         }
 
         appHelper.getLocalStorage($rootScope.currentRoomInfo.roomID);
+
+        appHelper.triggerPluginEvent(helper.PLUGIN_EVENT.roomChanged, data);
     });
 
     // Handle the CreateLeaderBoardResponse event.
@@ -785,10 +790,17 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
                     formatTimeFrameMessage(data.phaseData, now)
             });
         }
+
+        if (data.phaseData.phaseType === helper.PHASE_TYPE_ID.CodingPhase) {
+            appHelper.triggerPluginEditorEvent(helper.PLUGIN_EVENT.codingStart, data.phaseData);
+        } else if (data.phaseData.phaseType === helper.PHASE_TYPE_ID.IntermissionPhase) {
+            appHelper.triggerPluginEditorEvent(helper.PLUGIN_EVENT.codingEnd, data.phaseData);
+        }
     });
 
     // handle system test progress response
     socket.on(helper.EVENT_NAME.SystestProgressResponse, function (data) {
+        appHelper.triggerPluginEditorEvent(helper.PLUGIN_EVENT.systemTestEnd, data);
         if ($rootScope.roundData[data.roundID]) {
             // display as percentage instead of '0/0'
             $rootScope.roundData[data.roundID].systestProgress =
@@ -811,6 +823,7 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
     socket.on(helper.EVENT_NAME.SingleBroadcastResponse, function (data) {
         data.broadcast.popUpContent = data.broadcast.message;
         notificationService.addNotificationMessage(data.broadcast);
+        appHelper.triggerPluginEvent(helper.PLUGIN_EVENT.systemBroadcastReceived, data);
     });
 
     // request login
@@ -827,6 +840,8 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
             broadcast.popUpContent = broadcast.message;
             notificationService.addNotificationMessage(broadcast);
         });
+
+        appHelper.triggerPluginEvent(helper.PLUGIN_EVENT.systemBroadcastReceived, data);
     });
 
     // handle important messages
@@ -837,6 +852,7 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
             message: data.text,
             popUpContent: data.text
         });
+        appHelper.triggerPluginEvent(helper.PLUGIN_EVENT.systemBroadcastReceived, data);
     });
 }];
 

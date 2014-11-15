@@ -52,12 +52,17 @@
  * Changes in version 1.14 (Module Assembly - Web Arena Bug Fix 14.10 - 2):
  * - Fixed the go to line issue.
  *
+ * Changes in version 1.15 (Web Arena Plugin API Part 1):
+ * - Added plugin logic for coding editor panel.
+ *
  * @author tangzx, amethystlei, flytoj2ee, TCASSEMBLER
- * @version 1.14
+ * @version 1.15
  */
 'use strict';
+/*jshint -W097*/
 /*global module, CodeMirror, angular, document, $, window */
 /*jslint plusplus: true*/
+/*jslint unparam: true*/
 /**
  * The helper.
  *
@@ -121,10 +126,12 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
              * Close the dropdown.
              */
             closeDropdown = function () {
-                var isOpen = angular.element('.dropdown').hasClass('open');
-                if (isOpen) {
-                    angular.element('.dropdown').trigger('click');
-                }
+                $timeout(function () {
+                    var isOpen = angular.element('.dropdown').hasClass('open');
+                    if (isOpen) {
+                        angular.element('.dropdown').trigger('click');
+                    }
+                }, 1);
             };
 
         $scope.gotoLine = "";
@@ -687,6 +694,9 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
 
         // Handle the submit result response
         socket.on(helper.EVENT_NAME.SubmitResultsResponse, function (data) {
+
+            appHelper.triggerPluginEditorEvent(helper.PLUGIN_EVENT.solutionSubmitted, data);
+
             if (modalTimeoutPromise) {
                 $timeout.cancel(modalTimeoutPromise);
             }
@@ -698,7 +708,6 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
             });
         });
 
-        /*jslint unparam: true*/
         /**
          * Handle pop up generic response.
          */
@@ -722,6 +731,18 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
                 // only handle these responses for now
                 return;
             }
+
+            if (data.title === helper.POP_UP_TITLES.ChallengeResults) {
+                if (data.message.indexOf('Your challenge of') === 0 && data.message.indexOf(' was unsuccessful.') !== -1) {
+                    appHelper.triggerPluginEvent(helper.PLUGIN_EVENT.challengeFailed, data);
+                } else {
+                    appHelper.triggerPluginEvent(helper.PLUGIN_EVENT.challengeSucceeded, data);
+                }
+            }
+            if (data.title === helper.POP_UP_TITLES.CompileResult) {
+                appHelper.triggerPluginEditorEvent(helper.PLUGIN_EVENT.solutionCompiled, data);
+            }
+
             data.message = replaceAll('<', '&lt;', data.message);
             data.message = replaceAll('>', '&gt;', data.message);
 
@@ -765,7 +786,6 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
                 $scope.contentDirty = false;
             }
         });
-        /*jslint unparam: false*/
 
         /**
          * Handle test info response.
@@ -803,13 +823,12 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
             });
             $scope.customChecked = false;
             $scope.customTest = [];
-            /*jslint unparam: true*/
+
             angular.forEach($scope.problem.allArgTypes, function (arg) {
                 $scope.customTest.push({
                     value: ''
                 });
             });
-            /*jslint unparam: false*/
 
             /**
              * Select all test. Will not happen currently.
@@ -960,6 +979,61 @@ var userCodingEditorCtrl = ['$rootScope', '$scope', '$window', 'appHelper', 'soc
             angular.element($scope.errorBar).css('height',
                     (appHelper.getRenderedHeight($scope.cmElem) - 1) + 'px');
         };
+
+
+        /**
+         * Cache the code for plugin api.
+         */
+        $scope.$watch('code', function (newVal, oldVal) {
+            $rootScope.codeForPlugin = $scope.code;
+        });
+        /**
+         * Cache the problem object for plugin api.
+         */
+        $scope.$watch('problem', function (newVal, oldVal) {
+            $rootScope.problemForPlugin = $scope.problem;
+        });
+        /**
+         * Set code from plugin.
+         */
+        $scope.$on(helper.BROADCAST_PLUGIN_EVENT.setCodeFromPlugin, function (event, data) {
+            $scope.code = data;
+            $scope.cm.setValue(data);
+        });
+        /**
+         * Search the text from plugin.
+         */
+        $scope.$on(helper.BROADCAST_PLUGIN_EVENT.searchFromPlugin, function (event, data) {
+            $scope.searchText = data;
+            $timeout(function () {
+                angular.element('#searchByText').trigger('click');
+            }, 10);
+        });
+
+        /**
+         * Set language from plugin.
+         */
+        $scope.$on(helper.BROADCAST_PLUGIN_EVENT.setLanguageFromPlugin, function (event, languageName) {
+            angular.forEach($scope.languages, function (language, i) {
+                if (language.name.toLowerCase() === languageName.toLowerCase()) {
+                    $scope.langIdx = i;
+                    updateArgTypeAndMethod($scope.lang($scope.langIdx).id);
+                }
+            });
+        });
+
+        /**
+         * Compile the code.
+         */
+        $scope.$on(helper.BROADCAST_PLUGIN_EVENT.compileFromPlugin, function (event) {
+            $scope.compileSolution();
+        });
+        /**
+         * Submit the code.
+         */
+        $scope.$on(helper.BROADCAST_PLUGIN_EVENT.submitFromPlugin, function (event) {
+            $scope.submitSolution();
+        });
         /*
         $scope.lineNumbers = 21;
         $scope.errorMessages = $scope.range($scope.lineNumbers);

@@ -35,8 +35,11 @@
  * Changes in version 1.8 (Module Assembly - Web Arena - Local Chat Persistence):
  * - Added logic to set / get / clear data in local storage.
  *
- * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee
- * @version 1.8
+ * Changes in version 1.9 (Web Arena Plugin API Part 1):
+ * - Added trigger plugin logic.
+ *
+ * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee, TCASSEMBLER
+ * @version 1.9
  */
 'use strict';
 var config = require('./config');
@@ -45,6 +48,7 @@ var socket = require('socket.io-client').connect(config.webSocketURL);
 /*jshint -W097*/
 /*global $ : false, angular : false, require, module, document*/
 /*jslint plusplus: true*/
+/*global arena:true */
 
 var helper = require('./helper');
 ///////////////
@@ -470,6 +474,24 @@ factories.appHelper = ['$rootScope', 'localStorageService', 'sessionHelper', fun
     retHelper.getHeader = function () {
         return {headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + sessionHelper.getJwtToken()}};
+    };
+
+    /**
+     * Trigger the plugin event.
+     * @param event - the event name.
+     * @param param - the parameters.
+     */
+    retHelper.triggerPluginEvent = function (event, param) {
+        arena.trigger(event, param);
+    };
+
+    /**
+     * Trigger the editor plugin event.
+     * @param event - the event name.
+     * @param param - the parameters.
+     */
+    retHelper.triggerPluginEditorEvent = function (event, param) {
+        arena.editor.trigger(event, param);
     };
 
     return retHelper;
