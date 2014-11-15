@@ -663,7 +663,7 @@ body a {cursor: pointer;}
     width: 180px;
     height: 40px;
     z-index: 1000;
-    background-color: #000000;
+    background-color: #1c1c1c;
     opacity: 1;
     border: 1px solid #0bbbe7;
     -webkit-border-radius: 4px;
