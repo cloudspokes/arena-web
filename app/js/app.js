@@ -86,12 +86,16 @@
  * Changes in version 1.23 (PoC Assembly - Web Arena - Match Schedule Page)
  * - Added resources for match schedule page.
  *
+ * Changes in version 1.24 (Web Arena Plugin API Part 1):
+ * - Added arena global object for plugin api.
+ *
  * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee, TCSASSEMBLER
- * @version 1.23
+ * @version 1.24
  */
 'use strict';
 /*jshint -W097*/
 /*jshint strict:false*/
+/*global arena:true */
 /*global require*/
 require('./../../thirdparty/jquery/jquery');
 require('./../../bower_components/angular/angular');
@@ -524,6 +528,176 @@ main.run(['$rootScope', '$state', 'sessionHelper', 'socket', '$window', 'tcTimeS
         themer.styles[0].label = $cookies.themeLabel;
         themer.styles[0].href = $cookies.themeHref;
     }
+
+    if (!arena) {
+        arena = {};
+    }
+
+    arena = (function arena() {
+        var events = {};
+        return {
+            /**
+             * Trigger the event.
+             * @param event - the event name
+             * @param param - the parameters
+             */
+            trigger : function (event, param) {
+                if (event && events[event]) {
+                    if (typeof (events[event]) === "function") {
+                        events[event](param);
+                    } else {
+                        console.log('Failed to trigger ' + event);
+                    }
+                }
+            },
+            /**
+             * Register the event. It could accept a data parameter in callback method.
+             * @param event - the event name
+             * @param method - the callback method
+             */
+            on: function (event, method) {
+                if (helper.PLUGIN_EVENT[event] && typeof (method) === "function") {
+                    events[event] = method;
+                } else {
+                    console.log('The event name is invalid.');
+                }
+            },
+            /**
+             * Get the registered event.
+             * @param event - the event name
+             * @returns {*} - the callback method if event exists
+             */
+            getEvent: function(event) {
+                return events[event];
+            }
+        };
+    }());
+
+    arena.editor = (function editor() {
+        var events = {};
+
+        return {
+            /**
+             * Trigger the event.
+             * @param event - the event name
+             * @param param - the parameters
+             */
+            trigger : function (event, param) {
+                if (event && events[event]) {
+                    if (typeof (events[event]) === "function") {
+                        events[event](param);
+                    } else {
+                        console.log('Failed to trigger ' + event);
+                    }
+                }
+            },
+            /**
+             * Register the event. It could accept a data parameter in callback method.
+             * @param event - the event name
+             * @param method - the callback method
+             */
+            on: function (event, method) {
+                if (helper.PLUGIN_EVENT[event] && typeof (method) === "function") {
+                    events[event] = method;
+                } else {
+                    console.log('The event name is invalid.');
+                }
+            },
+            /**
+             * Get the registered event.
+             * @param event - the event name
+             * @returns {*} - the callback method if event exists
+             */
+            getEvent: function(event) {
+                return events[event];
+            },
+            /**
+             * Get the code in editor.
+             * @returns {$rootScope.codeForPlugin|*} the code value.
+             */
+            getCode : function () {
+                return $rootScope.codeForPlugin;
+            },
+            /**
+             * Get the problem object in editor.
+             * @returns {$rootScope.problemForPlugin|*} - the problem object.
+             */
+            getProblem : function () {
+                return $rootScope.problemForPlugin;
+            },
+            /**
+             * Get all test cases objects.
+             * @returns {Array} - the test cases objects.
+             */
+            getTestCases : function () {
+                var res = [];
+                res = res.concat($rootScope.userTests);
+                res = res.concat($rootScope.defaultTestCasesForPlugin);
+                return res;
+            },
+            /**
+             * Set the given code to editor.
+             * @param code - the code value.
+             */
+            setCode : function (code) {
+                $rootScope.$broadcast(helper.BROADCAST_PLUGIN_EVENT.setCodeFromPlugin, code);
+            },
+            /**
+             * Trigger the search in editor.
+             * @param text - the search text.
+             */
+            search : function (text) {
+                $rootScope.$broadcast(helper.BROADCAST_PLUGIN_EVENT.searchFromPlugin, text);
+            },
+            /**
+             * Set language to editor.
+             * @param languageName - the language name.
+             */
+            setLanguage : function (languageName) {
+                languageName = languageName ? languageName.toLowerCase() : '';
+                if (languageName === 'java' || languageName === 'c++' || languageName === 'c#' ||
+                    languageName === 'vb.net' || languageName === 'python') {
+                    $rootScope.$broadcast(helper.BROADCAST_PLUGIN_EVENT.setLanguageFromPlugin, languageName);
+                } else {
+                    console.log('The language name is invalid.');
+                }
+
+            },
+            /**
+             * Compile the code.
+             */
+            compile : function () {
+                $rootScope.$broadcast(helper.BROADCAST_PLUGIN_EVENT.compileFromPlugin, null);
+            },
+            /**
+             * Submit the code.
+             */
+            submitSolution : function () {
+                $rootScope.$broadcast(helper.BROADCAST_PLUGIN_EVENT.submitFromPlugin, null);
+            },
+            /**
+             * Run all test cases.
+             */
+            runAllTests : function () {
+                $rootScope.$broadcast(helper.BROADCAST_PLUGIN_EVENT.runAllTestCasesFromPlugin, null);
+            },
+            /**
+             * Run the test case by name.
+             * @param name - the test case name.
+             */
+            runTest : function (name) {
+                $rootScope.$broadcast(helper.BROADCAST_PLUGIN_EVENT.runTestCaseFromPlugin, name);
+            },
+            /**
+             * Set the given test cases to test panel.
+             * @param testCases - the test cases array
+             */
+            setTestCases : function (testCases) {
+                $rootScope.$broadcast(helper.BROADCAST_PLUGIN_EVENT.setTestCasesFromPlugin, testCases);
+            }
+        };
+    }());
+
     $rootScope.online = navigator.onLine;
     $window.addEventListener("offline", function () {
         $rootScope.$apply(function () {

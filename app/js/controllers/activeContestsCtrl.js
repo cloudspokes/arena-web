@@ -243,7 +243,7 @@ var activeContestsCtrl = ['$scope', '$rootScope', '$state', 'socket', 'appHelper
      * @returns {number} - the page number
      */
     $scope.numberOfPages = function (contest) {
-        return Math.ceil($scope.getRoomsList(contest).length / $scope.pageSize);
+        return $scope.getRoomsList(contest) ? Math.ceil($scope.getRoomsList(contest).length / $scope.pageSize) : 0;
     };
 
     /**
