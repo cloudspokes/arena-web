@@ -76,9 +76,12 @@
  * Changes in version 1.18 (Module Assembly - Web Arena - Quick Fixes for Contest Management)
  * - Added handling of ChangeRoundResponse, CommandSucceededResponse, CommandFailedResponse
  *   and RoundAccessResponse events.
+ * 
+ * Changes in version 1.19 (Module Assembly - Web Arena - Coder Placement)
+ * - Fixed coder placement algorithm to improve performance from Θ(n^2) to O(nlogn)
  *
- * @author amethystlei, dexy, ananthhh, flytoj2ee
- * @version 1.18
+ * @author amethystlei, dexy, ananthhh, flytoj2ee, goodwine
+ * @version 1.19
  */
 ///////////////
 // RESOLVERS //
@@ -133,13 +136,23 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
          * @param {Array} coders
          */
         updateCoderPlacement = function (coders) {
-            coders.forEach(function (item) {
-                item.roomPlace = 1;
-                coders.forEach(function (other) {
-                    if (item.userName !== other.userName && item.totalPoints < other.totalPoints) {
-                        item.roomPlace += 1;
-                    }
-                });
+            // descending order sorting by totalPoints
+            coders.sort(function(a, b){
+                if (a.totalPoints > b.totalPoints)
+                    return -1;
+                if (a.totalPoints < b.totalPoints)
+                    return 1;
+                return 0;
+            });
+            var roomPlace = 1; // coder's placement on the room.
+            var lastScore = -1; // to "freeze" roomPlace if the score is the same.
+            // assign the placement to each coder
+            coders.forEach(function(coder, index){
+                if (coder.totalPoints != lastScore) {
+                    roomPlace = index + 1;
+                    lastScore = coder.totalPoints;
+                }
+                coder.roomPlace = roomPlace;
             });
         };
     // No need to start again if user already logged in
