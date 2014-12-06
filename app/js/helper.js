@@ -85,8 +85,11 @@
  * Changes in version 1.22 (Web Arena Plugin API Part 1):
  * - Added plugin logic related event names.
  *
+ * Changes in version 1.23 (Web Arena Plugin API Part 2):
+ * - Added more plugin event names.
+ *
  * @author tangzx, amethystlei, dexy, ananthhh, flytoj2ee, TCASSEMBLER
- * @version 1.22
+ * @version 1.23
  */
 
 module.exports = {
@@ -455,7 +458,18 @@ module.exports = {
         solutionSubmitted: 'solutionSubmitted',
         codingStart: 'codingStart',
         codingEnd: 'codingEnd',
-        systemTestEnd: 'systemTestEnd'
+        systemTestEnd: 'systemTestEnd',
+        ready: 'ready'
+    },
+    PLUGIN_MATCHES_EVENT: {
+        phaseChanged: 'phaseChanged'
+    },
+    PLUGIN_ROOMS_EVENT: {
+        chatMessageReceived: 'chatMessageReceived'
+    },
+    // plugin leader board event
+    PLUGIN_LEADER_BOARD_EVENT: {
+        changed: 'changed'
     },
     // plugin broadcast event names.
     BROADCAST_PLUGIN_EVENT: {
@@ -466,6 +480,7 @@ module.exports = {
         submitFromPlugin: 'submitFromPlugin',
         runAllTestCasesFromPlugin: 'runAllTestCasesFromPlugin',
         runTestCaseFromPlugin: 'runTestCaseFromPlugin',
-        setTestCasesFromPlugin: 'setTestCasesFromPlugin'
+        setTestCasesFromPlugin: 'setTestCasesFromPlugin',
+        registerFromPlugin: 'registerFromPlugin'
     }
 };

@@ -39,8 +39,11 @@
  * Changes in version 1.10 (PoC Assembly - Invite friends To Participate On A Match From Facebook and Twitter):
  * - Added facebook / twitter invitation logic.
  *
+ * Changes in version 1.11 (Web Arena Plugin API Part 2):
+ * - Added registerFromPlugin event logic.
+ *
  * @author amethystlei, dexy, flytoj2ee, TCASSEMBLER
- * @version 1.10
+ * @version 1.11
  */
 'use strict';
 /*global module, angular, require*/
@@ -589,6 +592,24 @@ var activeContestsCtrl = ['$scope', '$rootScope', '$state', 'socket', 'appHelper
     $scope.getTabName = function (index) {
         return index >= 0 && index < tabNames.length ? tabNames[index] : 'Click to show tabs';
     };
+
+    /*jslint unparam: true*/
+    // Call register logic
+    $scope.$on(helper.BROADCAST_PLUGIN_EVENT.registerFromPlugin, function (event, roundId, callback) {
+        var tmp = null;
+        angular.forEach($rootScope.roundData, function (contest) {
+            if (contest.roundID === roundId) {
+                tmp = contest;
+            }
+        });
+        if (tmp !== null) {
+            $scope.doAction(tmp);
+            if (callback) {
+                callback();
+            }
+        }
+    });
+    /*jslint unparam: false*/
 }];
 
 module.exports = activeContestsCtrl;

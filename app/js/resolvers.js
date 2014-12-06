@@ -73,8 +73,11 @@
  * Changes in version 1.17 (Web Arena Plugin API Part 1):
  * - Added plugin logic for global and editor events.
  *
+ * Changes in version 1.18 (Web Arena Plugin API Part 2):
+ * - Added plugin logic to trigger events.
+ *
  * @author amethystlei, dexy, ananthhh, flytoj2ee, TCASSEMBLER
- * @version 1.17
+ * @version 1.18
  */
 ///////////////
 // RESOLVERS //
@@ -330,6 +333,8 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
             items.push(data.item);
             $rootScope.leaderBoardRoundData.push({roundID: data.roundID, items: items});
         }
+
+        appHelper.triggerPluginLeaderBoardEvent(helper.PLUGIN_LEADER_BOARD_EVENT.changed, data.roundID, data);
 
         $rootScope.$broadcast('rebuild:leaderBoardMethods');
         $rootScope.$broadcast('rebuild:leaderBoardLeaders');
@@ -643,6 +648,8 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
             $rootScope.chatContent[roomId].shift();
         }
 
+        appHelper.triggerPluginRoomEvent(helper.PLUGIN_ROOMS_EVENT.chatMessageReceived, roomId, data);
+
         if (data.type === helper.CHAT_TYPES.WhisperToYouChat || user === $rootScope.username()) {
             chatSound = document.getElementById('chatSound');
             if (chatSound) {
@@ -687,6 +694,7 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
         if (data.roomID < 0) {
             return;
         }
+        var roundId = null;
         angular.forEach($rootScope.roomData[data.roomID].coders, function (coder) {
             if (coder.userName === data.coderHandle) {
                 // update the total points of the coder
@@ -695,6 +703,20 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
         });
         updateCoderPlacement($rootScope.roomData[data.roomID].coders);
         $rootScope.$broadcast(helper.EVENT_NAME.UpdateCoderPointsResponse, data);
+
+        angular.forEach($rootScope.roundData, function (contest) {
+            if (contest.coderRooms) {
+                angular.forEach(contest.coderRooms, function (room) {
+                    if (room.roomID === data.roomID) {
+                        roundId = contest.roundID;
+                    }
+                });
+            }
+        });
+
+        if (roundId !== null) {
+            appHelper.triggerPluginLeaderBoardEvent(helper.PLUGIN_LEADER_BOARD_EVENT.changed, roundId, data);
+        }
     });
 
     // handle update coder component response
@@ -790,6 +812,8 @@ resolvers.finishLogin = ['$rootScope', '$q', '$state', '$filter', 'cookies', 'se
                     formatTimeFrameMessage(data.phaseData, now)
             });
         }
+
+        appHelper.triggerPluginMatchEvent(helper.PLUGIN_MATCHES_EVENT.phaseChanged, data.phaseData.roundID, data.phaseData);
 
         if (data.phaseData.phaseType === helper.PHASE_TYPE_ID.CodingPhase) {
             appHelper.triggerPluginEditorEvent(helper.PLUGIN_EVENT.codingStart, data.phaseData);

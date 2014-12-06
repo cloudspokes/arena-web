@@ -89,8 +89,11 @@
  * Changes in version 1.24 (Web Arena Plugin API Part 1):
  * - Added arena global object for plugin api.
  *
+ * Changes in version 1.25 (Web Arena Plugin API Part 2):
+ * - Added more implementations for plugin api.
+ *
  * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee, TCSASSEMBLER
- * @version 1.24
+ * @version 1.25
  */
 'use strict';
 /*jshint -W097*/
@@ -556,7 +559,7 @@ main.run(['$rootScope', '$state', 'sessionHelper', 'socket', '$window', 'tcTimeS
              * @param method - the callback method
              */
             on: function (event, method) {
-                if (helper.PLUGIN_EVENT[event] && typeof (method) === "function") {
+                if (helper.PLUGIN_EVENT[event] && (typeof method === "function")) {
                     events[event] = method;
                 } else {
                     console.log('The event name is invalid.');
@@ -567,8 +570,37 @@ main.run(['$rootScope', '$state', 'sessionHelper', 'socket', '$window', 'tcTimeS
              * @param event - the event name
              * @returns {*} - the callback method if event exists
              */
-            getEvent: function(event) {
+            getEvent: function (event) {
                 return events[event];
+            },
+            /**
+             * Get lobby rooms.
+             * @returns {Array} the rooms.
+             */
+            getRooms: function () {
+                var array = [];
+                angular.forEach($rootScope.lobbyMenu, function (lobby) {
+                    var tmp = {};
+                    tmp[lobby.roomID] = lobby;
+                    array.push(tmp);
+                });
+                return array;
+
+            },
+            /**
+             * The ready trigger event.
+             * @param method - the trigger event.
+             */
+            ready: function (method) {
+                if (typeof method === "function") {
+                    events[helper.PLUGIN_EVENT.ready] = method;
+                    // if user already login, trigger the event, if not, it'll refresh the page in login
+                    if ($rootScope.isLoggedIn) {
+                        method();
+                    }
+                } else {
+                    console.log('The event method is invalid.');
+                }
             }
         };
     }());
@@ -584,7 +616,7 @@ main.run(['$rootScope', '$state', 'sessionHelper', 'socket', '$window', 'tcTimeS
              */
             trigger : function (event, param) {
                 if (event && events[event]) {
-                    if (typeof (events[event]) === "function") {
+                    if (typeof events[event] === "function") {
                         events[event](param);
                     } else {
                         console.log('Failed to trigger ' + event);
@@ -597,7 +629,7 @@ main.run(['$rootScope', '$state', 'sessionHelper', 'socket', '$window', 'tcTimeS
              * @param method - the callback method
              */
             on: function (event, method) {
-                if (helper.PLUGIN_EVENT[event] && typeof (method) === "function") {
+                if (helper.PLUGIN_EVENT[event] && (typeof method === "function")) {
                     events[event] = method;
                 } else {
                     console.log('The event name is invalid.');
@@ -608,7 +640,7 @@ main.run(['$rootScope', '$state', 'sessionHelper', 'socket', '$window', 'tcTimeS
              * @param event - the event name
              * @returns {*} - the callback method if event exists
              */
-            getEvent: function(event) {
+            getEvent: function (event) {
                 return events[event];
             },
             /**
@@ -656,7 +688,7 @@ main.run(['$rootScope', '$state', 'sessionHelper', 'socket', '$window', 'tcTimeS
             setLanguage : function (languageName) {
                 languageName = languageName ? languageName.toLowerCase() : '';
                 if (languageName === 'java' || languageName === 'c++' || languageName === 'c#' ||
-                    languageName === 'vb.net' || languageName === 'python') {
+                        languageName === 'vb.net' || languageName === 'python') {
                     $rootScope.$broadcast(helper.BROADCAST_PLUGIN_EVENT.setLanguageFromPlugin, languageName);
                 } else {
                     console.log('The language name is invalid.');
@@ -694,6 +726,392 @@ main.run(['$rootScope', '$state', 'sessionHelper', 'socket', '$window', 'tcTimeS
              */
             setTestCases : function (testCases) {
                 $rootScope.$broadcast(helper.BROADCAST_PLUGIN_EVENT.setTestCasesFromPlugin, testCases);
+            },
+            /**
+             * Add trigger event for editor.
+             * @param method - the trigger event.
+             */
+            ready: function (method) {
+                if (typeof method === "function") {
+                    events[helper.PLUGIN_EVENT.ready] = method;
+                } else {
+                    console.log('The event method is invalid.');
+                }
+            }
+        };
+    }());
+
+    /**
+     * Get contest phase.
+     *
+     * @param contest the contest object
+     * @param phaseTypeId - the phase type id
+     * @returns {*} the phase
+     */
+    function getPhase(contest, phaseTypeId) {
+        var i;
+        if (!contest.phases) {
+            return null;
+        }
+        for (i = 0; i < contest.phases.length; i += 1) {
+            if (contest.phases[i].phaseType === phaseTypeId) {
+                return contest.phases[i];
+            }
+        }
+        return null;
+    }
+    /**
+     * Checks whether the registration phase is open.
+     * @param contest the contest object
+     * @returns {boolean} the result
+     */
+    function isRegistrationOpen(contest) {
+        if (!contest) {
+            return false;
+        }
+        var phase = getPhase(contest, helper.PHASE_TYPE_ID.RegistrationPhase);
+        if (!phase) {
+            return false;
+        }
+        return phase.startTime <= $rootScope.now && $rootScope.now <= phase.endTime;
+    }
+
+    /**
+     * Get round by id.
+     * @param roundId - the round id
+     * @returns {*} the round object
+     */
+    function getRound(roundId) {
+        var tmp = null;
+        angular.forEach($rootScope.roundData, function (contest) {
+            if (contest.roundID === roundId) {
+                tmp = contest;
+            }
+        });
+        return tmp;
+    }
+
+    arena.member = (function member() {
+        return {
+            /**
+             * Get user info.
+             * @returns {*} the user info
+             */
+            getInfo : function () {
+                return sessionHelper.getUserInfo();
+            },
+            /**
+             * Get user status.
+             * @returns user status
+             */
+            getStatus : function () {
+                var tmp = {lastLogin : sessionHelper.getUserInfo().lastLogin, currentlyLoggedIn: $rootScope.isLoggedIn,
+                    currentRoom : $rootScope.currentRoomInfo, registrationStatus: []};
+
+                angular.forEach($rootScope.roundData, function (contest) {
+                    if (isRegistrationOpen(contest)) {
+                        tmp.registrationStatus.push({roundID: contest.roundID, contestName: contest.contestName,
+                            roundName: contest.roundName, isRegistrationOpen: true, registered: contest.isRegistered});
+                    } else {
+                        tmp.registrationStatus.push({roundID: contest.roundID, contestName: contest.contestName,
+                            roundName: contest.roundName, isRegistrationOpen: false});
+                    }
+
+                });
+                return tmp;
+            },
+            /**
+             * Logout the user.
+             */
+            logout : function () {
+                if ($rootScope.isLoggedIn) {
+                    $state.go(helper.STATE_NAME.Logout);
+                } else {
+                    console.log('User is not logged in.');
+                }
+            }
+        };
+    }());
+
+
+    arena.match = (function match() {
+        var events = {};
+        return {
+            /**
+             * Get matches.
+             * @returns {Array} the matches
+             */
+            getMatches : function () {
+                var array = [];
+                angular.forEach($rootScope.roundData, function (contest) {
+                    var tmp = {};
+                    tmp[contest.roundID] = contest;
+                    array.push(tmp);
+                });
+                return array;
+            },
+            /**
+             * Trigger event.
+             * @param event the event name
+             * @param roundId the round id
+             * @param param the parameter
+             */
+            trigger : function (event, roundId, param) {
+                if (event && events[roundId + event]) {
+                    if (typeof (events[roundId + event]) === "function") {
+                        events[roundId + event](param);
+                    } else {
+                        console.log('Failed to trigger ' + event);
+                    }
+                }
+            },
+            /**
+             * Register the trigger event.
+             * @param event the event name
+             * @param roundId the round id
+             * @param method the trigger method
+             */
+            on: function (event, roundId, method) {
+                var tmp = getRound(roundId);
+                if (tmp === null) {
+                    console.log('The round id is invalid.');
+                } else {
+                    if (helper.PLUGIN_MATCHES_EVENT[event] && (typeof method === "function")) {
+                        events[roundId + event] = method;
+                    } else {
+                        console.log('The event name is invalid.');
+                    }
+                }
+            },
+            /**
+             * Get event.
+             * @param event the event name
+             * @param roundId the round id
+             * @returns {*} the event method
+             */
+            getEvent: function (event, roundId) {
+                return events[roundId + event];
+            },
+            /**
+             * Register the contest.
+             * @param roundId the round id.
+             * @param callback the callback method after open registration dialog.
+             */
+            register : function (roundId, callback) {
+
+                if (callback) {
+                    if (typeof callback !== "function") {
+                        console.log('Invalid callback paramter.');
+                        return;
+                    }
+                }
+
+                var tmp = getRound(roundId);
+                if (tmp === null) {
+                    console.log('Invalid round id paramter.');
+                } else {
+                    if (isRegistrationOpen(tmp)) {
+                        if (tmp.isRegistered) {
+                            console.log('You already registered in this match.');
+                        } else {
+                            $rootScope.$broadcast(helper.BROADCAST_PLUGIN_EVENT.registerFromPlugin, roundId, callback);
+                        }
+                    } else {
+                        console.log('Registration phase already closed.');
+                    }
+                }
+            }
+        };
+    }());
+
+    arena.matches = {};
+    arena.matches.rounds = (function rounds() {
+
+        return {
+            /**
+             * Get round rooms.
+             * @param roundId the round id
+             * @returns {Array} the round rooms
+             */
+            getRooms: function (roundId) {
+                var array = [], tmp = getRound(roundId), room, r;
+                if (tmp === null) {
+                    console.log('Invalid round id paramter.');
+                } else {
+                    if (tmp.adminRoom) {
+                        room = {};
+                        room[tmp.adminRoom.roomID] = tmp.adminRoom;
+                        array.push(room);
+                    }
+                    if (tmp.coderRooms) {
+                        angular.forEach(tmp.coderRooms, function (room) {
+                            r = {};
+                            r[room.roomID] = room;
+                            array.push(r);
+                        });
+                    }
+                }
+                return array;
+            },
+            /**
+             * The rooms object.
+             */
+            rooms : (function rooms() {
+                var events = {};
+                return {
+                    /**
+                     * Trigger the event
+                     * @param event the event name
+                     * @param roomId the room id
+                     * @param param the parameter
+                     */
+                    trigger : function (event, roomId, param) {
+                        if (event && events[roomId + event]) {
+                            if (typeof (events[roomId + event]) === "function") {
+                                events[roomId + event](param);
+                            } else {
+                                console.log('Failed to trigger ' + event);
+                            }
+                        }
+                    },
+                    /**
+                     * Register the event.
+                     * @param event the event name
+                     * @param roomId the room id
+                     * @param method the event method
+                     */
+                    on: function (event, roomId, method) {
+                        var tmp = null;
+                        angular.forEach($rootScope.lobbyMenu, function (lobby) {
+                            if (lobby.roomID === roomId) {
+                                tmp = lobby;
+                            }
+                        });
+                        if (tmp === null && $rootScope.roundData) {
+                            angular.forEach($rootScope.roundData, function (contest) {
+                                if (contest.coderRooms) {
+                                    angular.forEach(contest.coderRooms, function (r) {
+                                        if (r.roomID === roomId) {
+                                            tmp = r;
+                                        }
+                                    });
+                                }
+
+                                if (contest.adminRoom && (contest.adminRoom.roomID === roomId)) {
+                                    tmp = contest.adminRoom;
+                                }
+                            });
+                        }
+
+                        if (tmp === null) {
+                            console.log('The room id is invalid.');
+                        } else {
+                            if (helper.PLUGIN_ROOMS_EVENT[event] && (typeof method === "function")) {
+                                events[roomId + event] = method;
+                            } else {
+                                console.log('The event name is invalid.');
+                            }
+                        }
+                    },
+                    /**
+                     * Get event.
+                     * @param event the event name
+                     * @param roomId the room id
+                     * @returns {*} the event method
+                     */
+                    getEvent: function (event, roomId) {
+                        return events[roomId + event];
+                    },
+                    /**
+                     * Enter the round.
+                     * @param roundId the round id
+                     * @param roomId the room id
+                     * @param callback the callback method
+                     */
+                    enter: function (roundId, roomId, callback) {
+                        var tmp = getRound(roundId), room, empty = '';
+
+                        if (tmp === null) {
+                            console.log('The round id is invalid.');
+                        } else {
+                            room = null;
+                            if (tmp.coderRooms) {
+                                angular.forEach(tmp.coderRooms, function (r) {
+                                    if ((r.roomID + empty) === (roomId + empty)) {
+                                        room = r;
+                                    }
+                                });
+                            }
+
+                            if (room === null && tmp.adminRoom && (tmp.adminRoom.roomID === roomId)) {
+                                room = tmp.adminRoom;
+                            }
+
+                            if (room === null) {
+                                console.log('The room id is invalid.');
+                            } else {
+                                $rootScope.competingRoomID = roomId;
+                                // requests will be sent by the resolvers
+                                $state.go(helper.STATE_NAME.Contest, {
+                                    contestId: roundId
+                                }, {reload: true});
+
+                                if (callback) {
+                                    callback();
+                                }
+                            }
+                        }
+                    }
+                };
+            }())
+        };
+    }());
+
+    arena.leaderboard  = (function leaderboard() {
+        var events = {};
+        return {
+            /**
+             * Trigger the event.
+             * @param event the event name
+             * @param roundId the round id
+             * @param param the parameter
+             */
+            trigger : function (event, roundId, param) {
+                if (event && events[roundId + event]) {
+                    if (typeof (events[roundId + event]) === "function") {
+                        events[roundId + event](param);
+                    } else {
+                        console.log('Failed to trigger ' + event);
+                    }
+                }
+            },
+            /**
+             * Register the event.
+             * @param event the event name
+             * @param roundId the round id
+             * @param method the event method
+             */
+            on: function (event, roundId, method) {
+                var tmp = getRound(roundId);
+
+                if (tmp === null) {
+                    console.log('The round id is invalid.');
+                } else {
+                    if (helper.PLUGIN_LEADER_BOARD_EVENT[event] && (typeof method === "function")) {
+                        events[roundId + event] = method;
+                    } else {
+                        console.log('The event name is invalid.');
+                    }
+                }
+            },
+            /**
+             * Get event.
+             * @param event the event name.
+             * @param roundId the round id.
+             * @returns {*} the event method.
+             */
+            getEvent: function (event, roundId) {
+                return events[roundId + event];
             }
         };
     }());
