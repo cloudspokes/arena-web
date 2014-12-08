@@ -55,11 +55,16 @@ var challengesAdvertisingCtrl = ['$scope', '$http', 'appHelper', '$timeout', '$w
             link = config.tcHostName || 'https://www.topcoder.com';
             link += '/challenge-details/' + challenge.challengeId;
             link += '/?type=' + challenge.challengeCommunity.toLowerCase();
-            iconText = helper.CHALLENGE_ADVERTISING.TRACK_SHORTNAMES[(challenge.challengeType || "default")
-                .toLowerCase()].toUpperCase();
+            iconText = helper.CHALLENGE_ADVERTISING.TRACK_SHORTNAMES["default"];
+            if (challenge.challengeType
+                    && angular.isDefined(helper.CHALLENGE_ADVERTISING
+                        .TRACK_SHORTNAMES[challenge.challengeType.toLowerCase()])) {
+                iconText = helper.CHALLENGE_ADVERTISING.TRACK_SHORTNAMES[challenge.challengeType.toLowerCase()];
+            }
+
             $scope.challenges.push({
                 type: challenge.challengeCommunity.toLowerCase(),
-                iconText: iconText,
+                iconText: iconText.toUpperCase(),
                 color: helper.CHALLENGE_ADVERTISING.COLOR[challenge.challengeCommunity.toLowerCase()],
                 prize: prize,
                 title: challenge.challengeName,
@@ -84,8 +89,8 @@ var challengesAdvertisingCtrl = ['$scope', '$http', 'appHelper', '$timeout', '$w
      * @since 1.1
      */
     function updateChallenges() {
-        $http.get(config.apiDomain + '/challenges?pageIndex=-1&sortColumn=registrationEndDate&sortOrder=asc', header).
-                    success(successHandler).error(errorHandler);
+        $http.get(config.apiDomain + '/challenges?pageIndex=-1&sortColumn=registrationEndDate&sortOrder=asc', header)
+            .success(successHandler).error(errorHandler);
         $timeout.cancel(updaterHndl);
         updaterHndl = $timeout(updateChallenges, Number(config.challengeAdvertisingUpdate || 300000));
     }
