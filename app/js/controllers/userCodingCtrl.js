@@ -43,8 +43,11 @@
  * Changes in version 1.11 (Web Arena Plugin API Part 1):
  * - Added plugin logic for coding panel.
  *
+ * Changes in version 1.12 (Web Arena Plugin API Part 2):
+ * - Added plugin logic for ready.
+ *
  * @author dexy, amethystlei, TCASSEMBLER
- * @version 1.11
+ * @version 1.12
  */
 'use strict';
 /*global module, angular, document, $*/
@@ -402,6 +405,7 @@ var userCodingCtrl = ['$scope', '$stateParams', '$rootScope', 'socket', '$window
 
             problemRetrieved = true;
             notifyWhenProblemDataReady();
+
         });
 
         // handle open component response
@@ -430,6 +434,7 @@ var userCodingCtrl = ['$scope', '$stateParams', '$rootScope', 'socket', '$window
 
             componentOpened = true;
             notifyWhenProblemDataReady();
+            appHelper.triggerPluginEditorEvent(helper.PLUGIN_EVENT.ready, data);
         });
 
         /**

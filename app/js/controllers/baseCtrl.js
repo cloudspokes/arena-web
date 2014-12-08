@@ -76,8 +76,11 @@
  * - Fixed notification url issue.
  * - Added the scroll bar for popup modal detail panel.
  *
+ * Changes in version 1.18 (Web Arena Plugin API Part 2):
+ * - Fixed some undefined exceptions.
+ *
  * @author dexy, amethystlei, ananthhh, flytoj2ee, TCASSEMBLER
- * @version 1.17
+ * @version 1.18
  */
 'use strict';
 /*jshint -W097*/
@@ -788,11 +791,13 @@ var baseCtrl = ['$rootScope', '$scope', '$http', 'appHelper', 'notificationServi
      */
     $rootScope.getCurrentLeaderboard = function (viewOn, roomID) {
         if (viewOn === 'room') {
-            return $rootScope.roomData[roomID].coders;
+            return $rootScope.roomData && $rootScope.roomData[roomID] ? $rootScope.roomData[roomID].coders : [];
         }
         if (viewOn === 'divOne' || viewOn === 'divTwo') {
-            return $rootScope.leaderboard;
+            return $rootScope.leaderboard ? $rootScope.leaderboard : [];
         }
+
+        return [];
     };
 
     /**

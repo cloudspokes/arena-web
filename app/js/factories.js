@@ -38,8 +38,11 @@
  * Changes in version 1.9 (Web Arena Plugin API Part 1):
  * - Added trigger plugin logic.
  *
+ * Changes in version 1.10 (Web Arena Plugin API Part 2):
+ * - Added more trigger plugin logic.
+ *
  * @author tangzx, dexy, amethystlei, ananthhh, flytoj2ee, TCASSEMBLER
- * @version 1.9
+ * @version 1.10
  */
 'use strict';
 var config = require('./config');
@@ -492,6 +495,36 @@ factories.appHelper = ['$rootScope', 'localStorageService', 'sessionHelper', fun
      */
     retHelper.triggerPluginEditorEvent = function (event, param) {
         arena.editor.trigger(event, param);
+    };
+
+    /**
+     * Trigger the match plugin event.
+     * @param event - the event name
+     * @param roundId - the round id
+     * @param param - the parameters
+     */
+    retHelper.triggerPluginMatchEvent = function (event, roundId, param) {
+        arena.match.trigger(event, roundId, param);
+    };
+
+    /**
+     * Trigger the room plugin event.
+     * @param event - the event name
+     * @param roomId - the room id
+     * @param param - the parameters
+     */
+    retHelper.triggerPluginRoomEvent = function (event, roomId, param) {
+        arena.matches.rounds.rooms.trigger(event, roomId, param);
+    };
+
+    /**
+     * Trigger the leader board plugin event.
+     * @param event - the event name
+     * @param roundId - the round id
+     * @param param - the parameters
+     */
+    retHelper.triggerPluginLeaderBoardEvent = function (event, roundId, param) {
+        arena.leaderboard.trigger(event, roundId, param);
     };
 
     return retHelper;
