@@ -6254,11 +6254,14 @@ contestManagementPanel .panel-footer .btn {
 }
 .practiceProblemList .panel {
     min-height: 738px;
+    position: relative;
 }
 .practiceProblemList .panel .paginator {
     width: 100%;
     margin-left: -1px;
     padding-top: 16px;
+    position: absolute;
+    bottom: 0;
 }
 .problemListPanel .searchArea {
     padding: 23px 115px 0 28px;
