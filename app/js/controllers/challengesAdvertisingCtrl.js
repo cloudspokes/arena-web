@@ -45,7 +45,7 @@ var challengesAdvertisingCtrl = ['$scope', '$http', 'appHelper', '$timeout', '$w
      * @since 1.1
      */
     function successHandler(data) {
-        var prize, link, iconText;
+        var prize, link, iconText, iconWidth;
         $scope.challenges = [];
         angular.forEach(data.data, function (challenge) {
             prize = 0;
@@ -61,10 +61,11 @@ var challengesAdvertisingCtrl = ['$scope', '$http', 'appHelper', '$timeout', '$w
                         .TRACK_SHORTNAMES[challenge.challengeType.toLowerCase()])) {
                 iconText = helper.CHALLENGE_ADVERTISING.TRACK_SHORTNAMES[challenge.challengeType.toLowerCase()];
             }
-
+            iconWidth = 22 + 7 * Math.max(0, iconText.length - 2);
             $scope.challenges.push({
                 type: challenge.challengeCommunity.toLowerCase(),
                 iconText: iconText.toUpperCase(),
+                iconWidth: iconWidth + 'px',
                 color: helper.CHALLENGE_ADVERTISING.COLOR[challenge.challengeCommunity.toLowerCase()],
                 prize: prize,
                 title: challenge.challengeName,
