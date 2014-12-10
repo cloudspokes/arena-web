@@ -90,8 +90,8 @@ var challengesAdvertisingCtrl = ['$scope', '$http', 'appHelper', '$timeout', '$w
      * @since 1.1
      */
     function updateChallenges() {
-        $http.get(config.apiDomain + '/challenges/open?pageIndex=-1&sortColumn=registrationEndDate&sortOrder=asc', header)
-            .success(successHandler).error(errorHandler);
+        $http.get(config.apiDomain + '/challenges/open?pageIndex=-1&sortColumn=registrationEndDate&sortOrder=asc', header).
+                    success(successHandler).error(errorHandler);
         $timeout.cancel(updaterHndl);
         updaterHndl = $timeout(updateChallenges, Number(config.challengeAdvertisingUpdate || 300000));
     }
